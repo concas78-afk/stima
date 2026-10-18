@@ -1,0 +1,18 @@
+{
+  "name": "Stima",
+  "short_name": "Stima",
+  "description": "Micro CRM & Preventivi Veloci per Artigiani e Freelance",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%232563eb'/><path d='M40 18 C31 18 26 23 26 29 C26 34 30 37 35 37 C30 37 26 40 26 45 C26 50 32 52 40 52' stroke='white' stroke-width='5' fill='none' stroke-linecap='round'/><path d='M44 11 L48 15 L56 8' stroke='white' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

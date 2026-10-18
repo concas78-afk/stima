@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stima — Preventivi e Clienti in pochi minuti</title>
+  <meta name="description" content="Il CRM semplice per artigiani e liberi professionisti: crea preventivi, raccogli firme digitali e fatti pagare online. Prova gratis 4 mesi.">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="manifest" href="manifest.json">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-white text-gray-900 antialiased">
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <img src="logo-scheck.svg" alt="Stima" class="w-9 h-9">
+        <span class="font-extrabold text-lg tracking-tight">Stima</span>
+      </div>
+      <nav class="hidden sm:flex items-center gap-8 text-sm font-medium text-gray-600">
+        <a href="#features" class="hover:text-gray-900">Funzionalità</a>
+        <a href="#prezzi" class="hover:text-gray-900">Prezzi</a>
+        <a href="#faq" class="hover:text-gray-900">Domande</a>
+      </nav>
+      <a href="index.html" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-sm transition">Accedi</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-indigo-50 -z-10"></div>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center">
+      <span class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full mb-6">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        Pensato per artigiani e liberi professionisti
+      </span>
+      <h1 class="text-4xl sm:text-6xl font-black tracking-tight leading-tight">
+        Preventivi e clienti<br class="hidden sm:block">
+        in <span class="text-blue-600">pochi minuti</span>.
+      </h1>
+      <p class="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
+        Crea preventivi professionali, falli firmare sul tuo telefono, inviali su WhatsApp e fatti pagare online. Senza più carta, note sparse o preventivi persi.
+      </p>
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="index.html" class="w-full sm:w-auto px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white text-base font-bold rounded-xl shadow-lg shadow-blue-500/30 transition active:scale-95">
+          Inizia Gratis — 4 mesi di Pro
+        </a>
+        <a href="#prezzi" class="w-full sm:w-auto px-8 py-3.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-800 text-base font-semibold rounded-xl transition">
+          Vedi i prezzi
+        </a>
+      </div>
+      <p class="mt-4 text-xs text-gray-400">Nessuna carta di credito richiesta · Annulla quando vuoi</p>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+    <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-sm text-gray-400 font-medium">
+      <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Idraulici</span>
+      <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Elettricisti</span>
+      <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Imbianchini</span>
+      <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Installatori</span>
+      <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Consulenti</span>
+      <span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Personal trainer</span>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="max-w-6xl mx-auto px-4 sm:px-6 py-20">
+    <h2 class="text-3xl sm:text-4xl font-black text-center tracking-tight">Tutto quello che ti serve.<br class="hidden sm:block">Niente di più.</h2>
+    <p class="text-center text-gray-500 mt-4 max-w-xl mx-auto">Niente software contabili complicati. Solo le funzioni che ti fanno risparmiare tempo e incassare prima.</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-14">
+      <div class="p-6 rounded-2xl border border-gray-100 hover:shadow-lg hover:border-blue-100 transition">
+        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4"><i data-lucide="file-text" class="w-6 h-6"></i></div>
+        <h3 class="font-bold text-lg">Preventivi in 30 secondi</h3>
+        <p class="text-sm text-gray-500 mt-2">Numerazione automatica, listino voci salvate e calcolo IVA per ogni riga. Invio su WhatsApp ed email con un click.</p>
+      </div>
+      <div class="p-6 rounded-2xl border border-gray-100 hover:shadow-lg hover:border-blue-100 transition">
+        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4"><i data-lucide="pen-tool" class="w-6 h-6"></i></div>
+        <h3 class="font-bold text-lg">Firma digitale</h3>
+        <p class="text-sm text-gray-500 mt-2">Il cliente firma direttamente sul tuo schermo. La firma finisce stampata sul PDF accettato.</p>
+      </div>
+      <div class="p-6 rounded-2xl border border-gray-100 hover:shadow-lg hover:border-blue-100 transition">
+        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-4"><i data-lucide="credit-card" class="w-6 h-6"></i></div>
+        <h3 class="font-bold text-lg">Fatti pagare online</h3>
+        <p class="text-sm text-gray-500 mt-2">Invia un link di pagamento con l'importo già inserito, oppure le coordinate IBAN per il bonifico.</p>
+      </div>
+      <div class="p-6 rounded-2xl border border-gray-100 hover:shadow-lg hover:border-blue-100 transition">
+        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-4"><i data-lucide="calendar" class="w-6 h-6"></i></div>
+        <h3 class="font-bold text-lg">Agenda sopralluoghi</h3>
+        <p class="text-sm text-gray-500 mt-2">Organizza gli appuntamenti, invia promemoria WhatsApp e apri il navigatore verso il cantiere.</p>
+      </div>
+      <div class="p-6 rounded-2xl border border-gray-100 hover:shadow-lg hover:border-blue-100 transition">
+        <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4"><i data-lucide="users" class="w-6 h-6"></i></div>
+        <h3 class="font-bold text-lg">Rubrica clienti</h3>
+        <p class="text-sm text-gray-500 mt-2">Scheda cliente completa con storico di tutti i preventivi. Importa i contatti da WhatsApp, Gmail o Excel.</p>
+      </div>
+      <div class="p-6 rounded-2xl border border-gray-100 hover:shadow-lg hover:border-blue-100 transition">
+        <div class="w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center mb-4"><i data-lucide="megaphone" class="w-6 h-6"></i></div>
+        <h3 class="font-bold text-lg">Promozioni ai clienti</h3>
+        <p class="text-sm text-gray-500 mt-2">Invia offerte e sconti stagionali a tutti i tuoi clienti in un click, nel rispetto del GDPR.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREZZI -->
+  <section id="prezzi" class="bg-gray-50 py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 class="text-3xl sm:text-4xl font-black text-center tracking-tight">Prezzi semplici e onesti</h2>
+      <p class="text-center text-gray-500 mt-4">Inizia gratis. Passa a Pro solo quando ti rende la vita più facile.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-14 max-w-4xl mx-auto">
+        <!-- GRATIS -->
+        <div class="bg-white rounded-3xl border border-gray-200 p-8 flex flex-col">
+          <h3 class="font-bold text-xl">Gratis</h3>
+          <p class="text-sm text-gray-500 mt-1">Per provare e iniziare</p>
+          <div class="mt-6 mb-8">
+            <span class="text-5xl font-black">0 €</span>
+            <span class="text-gray-500 text-sm">/ per sempre</span>
+          </div>
+          <ul class="space-y-3 text-sm text-gray-600 flex-1">
+            <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 mt-0.5"></i> Fino a 3 clienti</li>
+            <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 mt-0.5"></i> 3 preventivi al mese</li>
+            <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 mt-0.5"></i> PDF e invio WhatsApp</li>
+            <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 mt-0.5"></i> Calcolo acconto e IVA</li>
+            <li class="flex items-start gap-2"><i data-lucide="x" class="w-4 h-4 text-gray-300 mt-0.5"></i> Firma digitale, foto, agenda</li>
+          </ul>
+          <a href="index.html" class="mt-8 w-full px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-bold rounded-xl transition text-center">Inizia Gratis</a>
+        </div>
+
+        <!-- PRO -->
+        <div class="bg-gray-900 text-white rounded-3xl p-8 flex flex-col relative overflow-hidden">
+          <span class="absolute top-5 right-5 px-3 py-1 bg-amber-500 text-gray-900 text-xs font-bold rounded-full">CONSIGLIATO</span>
+          <h3 class="font-bold text-xl">Pro</h3>
+          <p class="text-sm text-gray-400 mt-1">Per chi lavora davvero</p>
+          <div class="mt-6 mb-2">
+            <span class="text-5xl font-black">7,99 €</span>
+            <span class="text-gray-400 text-sm">/ mese</span>
+          </div>
+          <p class="text-sm text-amber-400 font-semibold mb-8">oppure 79,90 €/anno (risparmi 2 mesi)</p>
+          <ul class="space-y-3 text-sm text-gray-300 flex-1">
+            <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 mt-0.5"></i> Clienti e preventivi <b class="text-white">illimitati</b></li>
+            <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 mt-0.5"></i> Firma digitale e foto allegate</li>
+            <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 mt-0.5"></i> Listino voci, agenda e campagne email</li>
+            <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 mt-0.5"></i> Logo personalizzato sui PDF</li>
+            <li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400 mt-0.5"></i> Link di pagamento e backup</li>
+          </ul>
+          <!-- TODO Step 3: sostituisci con il tuo link Paddle / Lemon Squeezy / Stripe -->
+          <a id="checkout-pro-btn" href="index.html" class="mt-8 w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition text-center">Inizia la Prova Gratuita</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFERRAL -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 py-20 text-center">
+    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-3xl p-10 text-white">
+      <h3 class="text-2xl sm:text-3xl font-black">Guadagna 1 mese gratis 🎁</h3>
+      <p class="mt-3 text-purple-100 max-w-xl mx-auto">Condividi il tuo codice personale: quando un collega si iscrive col tuo codice, ricevi 1 mese di Pro gratis. E lui pure!</p>
+      <a href="index.html" class="mt-6 inline-block px-8 py-3 bg-white text-purple-700 font-bold rounded-xl transition hover:bg-purple-50">Ottieni il tuo codice</a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="max-w-3xl mx-auto px-4 sm:px-6 py-20">
+    <h2 class="text-3xl font-black text-center tracking-tight mb-10">Domande frequenti</h2>
+    <div class="space-y-4">
+      <div class="p-5 rounded-2xl border border-gray-100">
+        <h4 class="font-bold">Serve una carta di credito per provare?</h4>
+        <p class="text-sm text-gray-500 mt-1">No. La prova gratuita di 4 mesi non richiede nessuna carta.</p>
+      </div>
+      <div class="p-5 rounded-2xl border border-gray-100">
+        <h4 class="font-bold">I miei dati sono al sicuro?</h4>
+        <p class="text-sm text-gray-500 mt-1">Sì. Tutti i dati restano salvati sul tuo dispositivo. Non li condividiamo con nessuno.</p>
+      </div>
+      <div class="p-5 rounded-2xl border border-gray-100">
+        <h4 class="font-bold">Posso cancellarmi quando voglio?</h4>
+        <p class="text-sm text-gray-500 mt-1">Certo, in qualsiasi momento e senza penali.</p>
+      </div>
+      <div class="p-5 rounded-2xl border border-gray-100">
+        <h4 class="font-bold">Funziona sul telefono?</h4>
+        <p class="text-sm text-gray-500 mt-1">Sì, è ottimizzata per smartphone e installabile come app sulla schermata Home.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-gray-100 py-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+      <div class="flex items-center gap-2">
+        <img src="logo-scheck.svg" alt="Stima" class="w-6 h-6">
+        <span>Stima</span>
+      </div>
+      <p>© 2026 Stima. Tutti i diritti riservati.</p>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

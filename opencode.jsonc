@@ -1,0 +1,16 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "orchestrator",
+  "permissions": [
+    {
+      "action": "edit",
+      "resource": "**/*",
+      "effect": "allow"
+    },
+    {
+      "action": "read",
+      "resource": "**/*",
+      "effect": "allow"
+    }
+  ]
+}

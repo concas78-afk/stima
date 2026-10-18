@@ -1,0 +1,26 @@
+# Dipendenze
+node_modules/
+
+# Output di build (Vercel lo rigenera)
+dist/
+
+# Variabili d'ambiente (se in futuro ne userai)
+.env
+.env.*
+!.env.example
+
+# File di sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# Cache locale Vercel
+.vercel
+
+# Log
+*.log
+npm-debug.log*

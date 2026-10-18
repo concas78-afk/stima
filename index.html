@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="it" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Stima · Micro CRM & Preventivi Veloci</title>
+  <link rel="icon" type="image/svg+xml" href="logo-scheck.svg">
+  
+  <!-- PWA & Mobile Meta -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Stima">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="h-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col md:flex-row antialiased selection:bg-blue-500 selection:text-white">
+
+  <!-- SIDEBAR DESKTOP (Nascosta su schermi piccoli) -->
+  <aside class="hidden md:flex flex-col w-64 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shrink-0 justify-between">
+    <div>
+      <!-- Logo App -->
+      <div class="flex items-center gap-3 px-2 py-3 mb-6">
+        <img src="logo-scheck.svg" alt="Stima" class="w-10 h-10 shrink-0">
+        <div>
+          <h1 class="font-extrabold text-gray-900 dark:text-white tracking-tight leading-none text-lg">Stima</h1>
+          <span class="text-[11px] text-blue-600 dark:text-blue-400 font-semibold uppercase tracking-wider">Micro CRM</span>
+        </div>
+      </div>
+
+      <!-- Link Navigazione Desktop -->
+      <nav class="space-y-1">
+        <a href="#" data-tab="dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition hover:bg-gray-100 dark:hover:bg-gray-800">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" data-tab="quotes" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition hover:bg-gray-100 dark:hover:bg-gray-800">
+          <i data-lucide="file-text" class="w-5 h-5"></i>
+          <span>Preventivi</span>
+        </a>
+        <a href="#" data-tab="invoices" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition hover:bg-gray-100 dark:hover:bg-gray-800">
+          <i data-lucide="receipt" class="w-5 h-5"></i>
+          <span>Fatture</span>
+        </a>
+        <a href="#" data-tab="clients" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition hover:bg-gray-100 dark:hover:bg-gray-800">
+          <i data-lucide="users" class="w-5 h-5"></i>
+          <span>Clienti</span>
+        </a>
+        <a href="#" data-tab="pricebook" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition hover:bg-gray-100 dark:hover:bg-gray-800">
+          <i data-lucide="book-open" class="w-5 h-5"></i>
+          <span>Listino Prezzi</span>
+        </a>
+        <a href="#" data-tab="agenda" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition hover:bg-gray-100 dark:hover:bg-gray-800">
+          <i data-lucide="calendar" class="w-5 h-5"></i>
+          <span>Agenda Lavori</span>
+        </a>
+        <a href="#" data-tab="campaigns" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition hover:bg-gray-100 dark:hover:bg-gray-800">
+          <i data-lucide="megaphone" class="w-5 h-5"></i>
+          <span>Campagne Email</span>
+        </a>
+        <a href="#" data-tab="settings" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition hover:bg-gray-100 dark:hover:bg-gray-800">
+          <i data-lucide="settings" class="w-5 h-5"></i>
+          <span>Impostazioni</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Account (login / registrazione) -->
+    <div id="account-desktop" class="mb-3"></div>
+
+    <!-- Pulsante Tema & Info Piè di Pagina -->
+    <div class="pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+      <button onclick="App.toggleTheme()" title="Cambia Tema" class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+        <i data-lucide="sun-moon" class="w-4 h-4"></i>
+        <span>Tema</span>
+      </button>
+
+      <span class="text-[10px] text-gray-400 font-mono">v1.0 Pro</span>
+    </div>
+  </aside>
+
+  <!-- HEADER MOBILE (Visibile solo su smartphone) -->
+  <header class="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-30 pt-safe">
+    <div class="flex items-center gap-2.5">
+      <img src="logo-scheck.svg" alt="Stima" class="w-8 h-8">
+      <span class="font-bold text-gray-900 dark:text-white text-base">Stima</span>
+    </div>
+
+    <div class="flex items-center gap-1">
+      <span id="account-mobile"></span>
+      <button onclick="App.toggleTheme()" class="p-2 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+        <i data-lucide="sun-moon" class="w-5 h-5"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENITORE PRINCIPALE VISTE -->
+  <main class="flex-1 overflow-y-auto p-4 sm:p-8 pb-28 md:pb-8">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- Vista 1: Dashboard -->
+      <section id="dashboard-view" class="view-section"></section>
+
+      <!-- Vista 2: Preventivi -->
+      <section id="quotes-view" class="view-section hidden"></section>
+
+      <!-- Vista 2b: Fatture & Incassi -->
+      <section id="invoices-view" class="view-section hidden"></section>
+
+      <!-- Vista 3: Clienti -->
+      <section id="clients-view" class="view-section hidden"></section>
+
+      <!-- Vista 4: Listino Prezzi & Materiali -->
+      <section id="pricebook-view" class="view-section hidden"></section>
+
+      <!-- Vista 5: Agenda & Sopralluoghi -->
+      <section id="agenda-view" class="view-section hidden"></section>
+
+      <!-- Vista 6: Campagne Email di Massa -->
+      <section id="campaigns-view" class="view-section hidden"></section>
+
+      <!-- Vista 7: Impostazioni -->
+      <section id="settings-view" class="view-section hidden"></section>
+
+    </div>
+  </main>
+
+  <!-- BOTTOM BAR MOBILE (Stile App Nativa iOS/Android) -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 z-40 flex items-center justify-around py-2 px-1 pb-safe shadow-lg">
+    <button data-tab="dashboard" class="flex flex-col items-center gap-0.5 text-[11px] transition">
+      <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+      <span>Home</span>
+    </button>
+    <button data-tab="quotes" class="flex flex-col items-center gap-0.5 text-[11px] transition">
+      <i data-lucide="file-text" class="w-5 h-5"></i>
+      <span>Preventivi</span>
+    </button>
+    <button data-tab="invoices" class="flex flex-col items-center gap-0.5 text-[11px] transition">
+      <i data-lucide="receipt" class="w-5 h-5"></i>
+      <span>Fatture</span>
+    </button>
+    <button data-tab="clients" class="flex flex-col items-center gap-0.5 text-[11px] transition">
+      <i data-lucide="users" class="w-5 h-5"></i>
+      <span>Clienti</span>
+    </button>
+    <button data-tab="agenda" class="flex flex-col items-center gap-0.5 text-[11px] transition">
+      <i data-lucide="calendar" class="w-5 h-5"></i>
+      <span>Agenda</span>
+    </button>
+    <button data-tab="pricebook" class="flex flex-col items-center gap-0.5 text-[11px] transition">
+      <i data-lucide="book-open" class="w-5 h-5"></i>
+      <span>Listino</span>
+    </button>
+    <button data-tab="campaigns" class="flex flex-col items-center gap-0.5 text-[11px] transition">
+      <i data-lucide="megaphone" class="w-5 h-5"></i>
+      <span>Offerte</span>
+    </button>
+  </nav>
+
+  <!-- MODALE: AGGIUNGI / MODIFICA CLIENTE -->
+  <div id="client-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+        <h3 id="client-modal-title" class="text-lg font-bold text-gray-900 dark:text-white">Nuovo Cliente</h3>
+        <button onclick="ClientsModule.closeModal()" class="text-gray-400 hover:text-gray-600 rounded-lg p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="ClientsModule.saveFromModal(event)" class="mt-4 space-y-3.5">
+        <input type="hidden" id="client-id">
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Nome o Referente *</label>
+          <input type="text" id="client-name" required placeholder="Es. Mario Rossi o Condominio Sole" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Azienda / Ragione Sociale (Opzionale)</label>
+          <input type="text" id="client-company" placeholder="Es. Rossi Srl" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Telefono / Cellulare</label>
+            <input type="text" id="client-phone" placeholder="+39 333 1234567" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Email</label>
+            <input type="email" id="client-email" placeholder="cliente@email.it" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Indirizzo</label>
+            <input type="text" id="client-address" placeholder="Via Roma 10" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">P.IVA o Codice Fiscale</label>
+            <input type="text" id="client-taxid" placeholder="CF o Partita IVA" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+          </div>
+        </div>
+
+        <!-- Dati per Fatturazione Elettronica -->
+        <div class="p-3 bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-gray-100 dark:border-gray-700 space-y-3">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+            <i data-lucide="file-check" class="w-3.5 h-3.5 text-indigo-500"></i>
+            Dati per Fatturazione Elettronica
+          </label>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">Tipo Cliente</label>
+              <select id="client-customer-type" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="privato">Privato</option>
+                <option value="azienda">Azienda / Professionista</option>
+                <option value="pa">Pubblica Amministrazione</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">Codice Destinatario (7 caratteri)</label>
+              <input type="text" id="client-recipient-code" placeholder="ABC1234 o 0000000" maxlength="7" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-mono uppercase outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-white">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">PEC (se non hai codice destinatario)</label>
+              <input type="text" id="client-pec" placeholder="cliente@pec.it" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-white">
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">CAP</label>
+                <input type="text" id="client-cap" placeholder="00100" class="w-full px-2 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-white">
+              </div>
+              <div class="col-span-2">
+                <label class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">Città</label>
+                <input type="text" id="client-city" placeholder="Roma" class="w-full px-2 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-white">
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">Provincia</label>
+              <input type="text" id="client-province" placeholder="RM" maxlength="2" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm uppercase outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-white">
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-1">Nazione</label>
+              <input type="text" id="client-nation" placeholder="IT" maxlength="2" value="IT" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm uppercase outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 dark:text-white">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Note Libere</label>
+          <textarea id="client-notes" rows="2" placeholder="Note su citofono, orari di disponibilità..." class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white"></textarea>
+        </div>
+        <div class="pt-3 flex justify-end gap-2 border-t border-gray-100 dark:border-gray-700">
+          <button type="button" onclick="ClientsModule.closeModal()" class="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition">Annulla</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-sm transition">Salva Cliente</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODALE: AGGIUNGI / MODIFICA PREVENTIVO -->
+  <div id="quote-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+        <h3 id="quote-modal-title" class="text-lg font-bold text-gray-900 dark:text-white">Nuovo Preventivo</h3>
+        <button onclick="QuotesModule.closeModal()" class="text-gray-400 hover:text-gray-600 rounded-lg p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="QuotesModule.saveFromModal(event)" class="mt-4 space-y-4">
+        <input type="hidden" id="quote-id">
+
+        <!-- Testata Preventivo -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Numero *</label>
+            <input type="text" id="quote-number" required class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm font-bold text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div class="sm:col-span-2 relative">
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Cliente *</label>
+            <input type="text" id="quote-client-search" placeholder="Cerca cliente o digita un nuovo nome..." oninput="QuotesModule.onQuoteClientSearch(this.value)" onfocus="QuotesModule.onQuoteClientSearch(this.value)" onblur="setTimeout(() => document.getElementById('quote-client-list').classList.add('hidden'), 200)" autocomplete="off" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="hidden" id="quote-client-id">
+            <div id="quote-client-list" class="hidden absolute z-10 left-0 right-0 mt-1 max-h-52 overflow-y-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl shadow-lg divide-y divide-gray-100 dark:divide-gray-700"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Data Emissione</label>
+            <input type="date" id="quote-date" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Validità fino a</label>
+            <input type="date" id="quote-due-date" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Stato</label>
+            <select id="quote-status" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="Bozza">Bozza</option>
+              <option value="Inviato">Inviato</option>
+              <option value="Approvato">Approvato</option>
+              <option value="Eseguito">Eseguito (lavoro completato)</option>
+              <option value="Saldato">Saldato</option>
+              <option value="Rifiutato">Rifiutato</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Sezione Righe Lavori / Servizi & Inserimento da Listino -->
+        <div class="pt-2">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
+            <label class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Voci di Spesa / Lavori</label>
+            
+            <div class="flex items-center gap-2">
+              <select 
+                id="quote-pricebook-select" 
+                onchange="QuotesModule.addItemFromPricebook(this.value)"
+                class="px-2.5 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700/60 text-indigo-800 dark:text-indigo-200 rounded-lg text-xs font-semibold outline-none max-w-[240px]"
+              >
+                <option value="">+ Scegli dal Listino...</option>
+              </select>
+
+              <button type="button" onclick="QuotesModule.addItem()" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg text-xs font-semibold hover:bg-blue-100">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                <span>Riga Vuota</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Intestazione Colonne Voci -->
+          <div class="hidden sm:flex sm:items-center gap-2 px-2.5 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+            <div class="sm:w-[34%]">Descrizione</div>
+            <div class="sm:w-[8%] text-center">Qtà</div>
+            <div class="sm:w-[16%] text-right">Prezzo €</div>
+            <div class="sm:w-[12%] text-center">IVA</div>
+            <div class="sm:w-[20%] text-right">Sconto voce €</div>
+            <div class="sm:w-[6%]"></div>
+          </div>
+
+          <div id="quote-items-container" class="space-y-2"></div>
+        </div>
+
+        <!-- Sconto, Acconto e Totali -->
+        <div class="p-3.5 bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-gray-100 dark:border-gray-700 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3 flex-wrap">
+              <div class="flex items-center gap-1.5">
+                <label class="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Sconto (€):</label>
+                <input type="number" id="quote-discount" min="0" step="0.01" value="0" oninput="QuotesModule.recalculateModalTotals()" class="w-20 px-2 py-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white text-right outline-none">
+              </div>
+
+              <div class="flex items-center gap-1.5">
+                <label class="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Acconto %:</label>
+                <select id="quote-deposit-percent" onchange="QuotesModule.recalculateModalTotals()" class="px-2 py-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs font-semibold text-gray-900 dark:text-white outline-none">
+                  <option value="0">Nessuno</option>
+                  <option value="20">20%</option>
+                  <option value="30" selected>30%</option>
+                  <option value="40">40%</option>
+                  <option value="50">50%</option>
+                </select>
+              </div>
+
+              <div class="flex items-center gap-1.5">
+                <label class="text-xs font-semibold text-gray-700 dark:text-gray-300 whitespace-nowrap">Oppure Acconto (€):</label>
+                <input type="number" id="quote-deposit-amount" min="0" step="0.01" value="0" placeholder="Cifra libera" oninput="QuotesModule.updateDepositFromAmount(this.value)" class="w-24 px-2 py-1 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white text-right outline-none">
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4 sm:gap-6 justify-end text-xs sm:text-sm flex-wrap">
+              <div>
+                <span class="text-xs text-gray-400">Imponibile:</span>
+                <span id="modal-subtotal" class="font-bold text-gray-700 dark:text-gray-300 ml-1">€ 0.00</span>
+              </div>
+              <div>
+                <span class="text-xs text-gray-400">IVA:</span>
+                <span id="modal-tax-total" class="font-bold text-gray-700 dark:text-gray-300 ml-1">€ 0.00</span>
+              </div>
+              <div>
+                <span class="text-xs text-gray-400">Totale:</span>
+                <span id="modal-grand-total" class="text-lg font-black text-blue-600 dark:text-blue-400 ml-1">€ 0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="modal-deposit-summary" class="text-xs font-semibold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/20 px-3 py-1.5 rounded-lg text-right">
+            Acconto (30%): € 0.00 • Saldo: € 0.00
+          </div>
+        </div>
+
+        <!-- Allegato Foto Sopralluogo / Lavori -->
+        <div class="p-3.5 bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-gray-100 dark:border-gray-700">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <span class="text-xs font-bold text-gray-700 dark:text-gray-200 flex items-center gap-1.5">
+                <i data-lucide="camera" class="w-4 h-4 text-purple-600"></i>
+                Foto Sopralluogo / Stato Lavori (Max 4 foto, stampate sul PDF)
+              </span>
+            </div>
+            <label class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-lg cursor-pointer transition">
+              <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+              <span>Allega Foto</span>
+              <input type="file" accept="image/*" multiple onchange="QuotesModule.handlePhotoUpload(event)" class="hidden" />
+            </label>
+          </div>
+          <div id="quote-photos-preview" class="flex items-center gap-2.5 flex-wrap mt-2"></div>
+        </div>
+
+        <!-- Note e Condizioni -->
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Note e Condizioni di Pagamento</label>
+          <textarea id="quote-notes" rows="2" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+
+        <div class="pt-3 flex justify-end gap-2 border-t border-gray-100 dark:border-gray-700">
+          <button type="button" onclick="QuotesModule.closeModal()" class="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition">Annulla</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl shadow-sm transition">Salva Preventivo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODALE: ANTEPRIMA STAMPA / DOWNLOAD PDF -->
+  <div id="pdf-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-2 sm:p-6">
+    <div class="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[95vh] overflow-hidden border border-gray-200 dark:border-gray-700">
+      
+      <!-- Barra Azioni Superiore -->
+      <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/60 no-print">
+        <div class="flex items-center gap-2">
+          <i data-lucide="printer" class="w-5 h-5 text-blue-600"></i>
+          <span class="font-bold text-gray-900 dark:text-white text-sm">Anteprima Stampa A4 / PDF</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="PdfModule.openSignatureFromPreview()" class="inline-flex items-center gap-2 px-3 py-2 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 hover:bg-amber-100 text-xs font-semibold rounded-xl transition">
+            <i data-lucide="pen-tool" class="w-4 h-4"></i>
+            <span>Fai Firmare</span>
+          </button>
+          <button onclick="PdfModule.downloadFatturaPA()" class="inline-flex items-center gap-2 px-3 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 text-xs font-semibold rounded-xl transition" title="Genera XML FatturaPA per fatturazione elettronica">
+            <i data-lucide="file-code-2" class="w-4 h-4"></i>
+            <span>XML FatturaPA</span>
+          </button>
+          <button onclick="PdfModule.sendToAccountant()" class="inline-flex items-center gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 text-xs font-semibold rounded-xl transition" title="Invia una copia XML al tuo commercialista">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>Invia al Commercialista</span>
+          </button>
+          <button onclick="PdfModule.sendEmail()" class="inline-flex items-center gap-2 px-3 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-100 text-xs font-semibold rounded-xl transition">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+            <span>Invia via Email</span>
+          </button>
+          <button onclick="PdfModule.print()" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow-sm transition active:scale-95">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Stampa o Salva PDF</span>
+          </button>
+          <button onclick="PdfModule.closeModal()" class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-xl">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Area Documento A4 Formattato -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-10 bg-gray-100 dark:bg-gray-950 flex justify-center">
+        <div id="printable-quote-area" class="w-full max-w-3xl bg-white text-gray-900 p-8 sm:p-12 rounded-xl shadow-lg border border-gray-200">
+          <!-- Popolato dinamicamente da PdfModule.preview() -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODALE: SCHEDA DETTAGLIO CLIENTE & STORICO PREVENTIVI -->
+  <div id="client-detail-modal" class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-2 sm:p-6">
+    <div class="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-4xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden border border-gray-200 dark:border-gray-700">
+      <div id="client-detail-content" class="flex-1 overflow-y-auto p-4 sm:p-6">
+        <!-- Popolato dinamicamente da ClientsModule.openDetail() -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE: INVIA PREVENTIVO VIA EMAIL -->
+  <div id="email-quote-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center font-bold">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+          </div>
+          <h3 class="text-base font-bold text-gray-900 dark:text-white">Invia Preventivo via Email</h3>
+        </div>
+        <button onclick="QuotesModule.closeEmailModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-3.5 text-xs sm:text-sm">
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Destinatario:</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="email-modal-to" readonly class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white font-medium outline-none">
+            <button onclick="QuotesModule.copyEmailField('email-modal-to', 'Indirizzo email copiato!')" title="Copia email" class="p-2 border border-gray-200 dark:border-gray-600 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300">
+              <i data-lucide="copy" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Oggetto:</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="email-modal-subject" readonly class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white font-medium outline-none">
+            <button onclick="QuotesModule.copyEmailField('email-modal-subject', 'Oggetto copiato!')" title="Copia oggetto" class="p-2 border border-gray-200 dark:border-gray-600 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300">
+              <i data-lucide="copy" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="text-xs font-semibold text-gray-500">Testo del Messaggio:</label>
+            <button onclick="QuotesModule.copyEmailField('email-modal-body', 'Testo messaggio copiato!')" class="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-semibold">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copia Testo</span>
+            </button>
+          </div>
+          <textarea id="email-modal-body" rows="6" readonly class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-xs text-gray-900 dark:text-white font-mono leading-relaxed outline-none"></textarea>
+        </div>
+
+        <!-- Opzioni di Invio Rapido -->
+        <div class="pt-3 border-t border-gray-100 dark:border-gray-700 space-y-2">
+          <!-- Gmail Web Button -->
+          <button id="email-modal-gmail-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-sm transition active:scale-95">
+            <i data-lucide="external-link" class="w-4 h-4"></i>
+            <span>Apri subito in Gmail Web (Browser)</span>
+          </button>
+
+          <!-- Standard Mailto Button -->
+          <button id="email-modal-mailto-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-sm transition active:scale-95">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+            <span>Apri con App di Posta (Outlook / Apple Mail)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE: FIRMA DIGITALE SULLO SCHERMO (HTML5 Canvas) -->
+  <div id="signature-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+        <div>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <i data-lucide="pen-tool" class="w-5 h-5 text-amber-600"></i>
+            Firma Digitale Cliente
+          </h3>
+          <p id="sig-modal-subtitle" class="text-xs text-gray-500 mt-0.5"></p>
+        </div>
+        <button onclick="QuotesModule.closeSignatureModal()" class="text-gray-400 hover:text-gray-600 rounded-lg p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="mt-4">
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Firma col dito (su smartphone/tablet) o col mouse qui sotto per accettazione del preventivo:</p>
+        <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl overflow-hidden bg-white">
+          <canvas id="signature-canvas" class="w-full h-48 cursor-crosshair touch-none"></canvas>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
+        <button type="button" onclick="QuotesModule.clearSignature()" class="px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition">
+          Pulisci Riquadro
+        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="QuotesModule.closeSignatureModal()" class="px-4 py-2 text-xs font-semibold text-gray-500 hover:bg-gray-100 rounded-xl">Annulla</button>
+          <button type="button" onclick="QuotesModule.saveSignature()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-sm transition">
+            Conferma Firma & Approva
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE: AGGIUNGI / MODIFICA VOCE LISTINO (PRICEBOOK) -->
+  <div id="pricebook-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-md p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+        <h3 id="pb-modal-title" class="text-lg font-bold text-gray-900 dark:text-white">Nuova Voce Listino</h3>
+        <button onclick="PricebookModule.closeModal()" class="text-gray-400 hover:text-gray-600 rounded-lg p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="PricebookModule.saveFromModal(event)" class="mt-4 space-y-3.5">
+        <input type="hidden" id="pb-id">
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Categoria *</label>
+          <select id="pb-category-select" onchange="PricebookModule.toggleNewCategory()" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="">Seleziona categoria...</option>
+            <option value="__new__">➕ Nuova categoria...</option>
+          </select>
+          <input type="text" id="pb-category-new" placeholder="Nome nuova categoria" class="hidden mt-2 w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Descrizione Prestazione o Materiale *</label>
+          <input type="text" id="pb-description" required placeholder="Es. Posa punto acqua o Tariffa oraria..." class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Prezzo Unitario (€) *</label>
+            <input type="number" id="pb-price" min="0" step="0.01" required class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Aliquota IVA Predefinita</label>
+            <select id="pb-vat" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="22">IVA 22%</option>
+              <option value="10">IVA 10%</option>
+              <option value="4">IVA 4%</option>
+              <option value="0">0% (Esente)</option>
+            </select>
+          </div>
+        </div>
+        <div class="pt-3 flex justify-end gap-2 border-t border-gray-100 dark:border-gray-700">
+          <button type="button" onclick="PricebookModule.closeModal()" class="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 rounded-xl">Annulla</button>
+          <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-sm">Salva nel Listino</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODALE: AGGIUNGI / MODIFICA APPUNTAMENTO AGENDA -->
+  <div id="agenda-modal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+        <h3 id="apt-modal-title" class="text-lg font-bold text-gray-900 dark:text-white">Nuovo Appuntamento</h3>
+        <button onclick="AgendaModule.closeModal()" class="text-gray-400 hover:text-gray-600 rounded-lg p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form onsubmit="AgendaModule.saveFromModal(event)" class="mt-4 space-y-3.5">
+        <input type="hidden" id="apt-id">
+
+        <div class="relative">
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Cliente *</label>
+          <input type="text" id="apt-client-search" placeholder="Cerca cliente o digita un nuovo nome..." oninput="AgendaModule.onClientSearch(this.value)" onfocus="AgendaModule.onClientSearch(this.value)" onblur="setTimeout(() => document.getElementById('apt-client-list').classList.add('hidden'), 200)" autocomplete="off" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-500">
+          <input type="hidden" id="apt-client-id">
+          <div id="apt-client-list" class="hidden absolute z-10 left-0 right-0 mt-1 max-h-52 overflow-y-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl shadow-lg divide-y divide-gray-100 dark:divide-gray-700"></div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Titolo Intervento / Sopralluogo *</label>
+          <input type="text" id="apt-title" required placeholder="Es. Sopralluogo preventivo caldaia..." class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-500">
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Data *</label>
+            <input type="date" id="apt-date" required class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Ora *</label>
+            <input type="time" id="apt-time" required class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Durata</label>
+            <select id="apt-duration" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-500">
+              <option value="30">30 min</option>
+              <option value="60" selected>1 ora</option>
+              <option value="90">1h 30</option>
+              <option value="120">2 ore</option>
+              <option value="150">2h 30</option>
+              <option value="180">3 ore</option>
+              <option value="240">4 ore</option>
+              <option value="360">6 ore</option>
+              <option value="480">8 ore</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Stato</label>
+            <select id="apt-status" class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-500">
+              <option value="Programmato">Programmato</option>
+              <option value="Completato">Completato</option>
+              <option value="Annullato">Annullato</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Indirizzo Cantiere (Lascia vuoto per usare quello del cliente)</label>
+          <input type="text" id="apt-location" placeholder="Via..." class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Preventivo collegato</label>
+          <div id="apt-quote-box" class="flex items-center gap-2"></div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Note</label>
+          <textarea id="apt-notes" rows="2" placeholder="Attrezzatura da portare, citofono..." class="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+        </div>
+
+        <div class="pt-3 flex items-center justify-between gap-2 border-t border-gray-100 dark:border-gray-700">
+          <button type="button" onclick="AgendaModule.toggleVoice()" title="Dettatura vocale" class="p-2.5 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition">
+            <i data-lucide="mic" class="w-5 h-5"></i>
+          </button>
+          <div class="flex gap-2">
+            <button type="button" onclick="AgendaModule.closeModal()" class="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 rounded-xl">Annulla</button>
+            <button type="submit" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold rounded-xl shadow-sm">Salva in Agenda</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODALE: SELEZIONA PREVENTIVO DA ALLEGARE -->
+  <div id="quote-picker-modal" class="fixed inset-0 z-[55] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+        <h3 class="text-base font-bold text-gray-900 dark:text-white">Allega un preventivo</h3>
+        <button onclick="AgendaModule.closeQuotePicker()" class="text-gray-400 hover:text-gray-600 rounded-lg p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="quote-picker-content" class="mt-4 space-y-2"></div>
+    </div>
+  </div>
+
+  <!-- MODALE: IMPORT CLIENTI IN MASSA -->
+  <div id="import-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700 mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+            <i data-lucide="upload" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-gray-900 dark:text-white">Importa Clienti in Massa</h3>
+            <p class="text-xs text-gray-500">Da WhatsApp, Gmail, Outlook o Excel.</p>
+          </div>
+        </div>
+        <button onclick="ImportModule.closeModal()" class="text-gray-400 hover:text-gray-600 rounded-lg p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div id="import-modal-content">
+        <!-- Popolato dinamicamente da ImportModule -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE: INVIA LINK DI PAGAMENTO -->
+  <div id="payment-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+            <i data-lucide="credit-card" class="w-4 h-4"></i>
+          </div>
+          <h3 id="payment-modal-title" class="text-base font-bold text-gray-900 dark:text-white">Pagamento</h3>
+        </div>
+        <button onclick="QuotesModule.closePaymentModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-3.5">
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">Messaggio di pagamento da inviare al cliente:</label>
+          <div class="flex items-start gap-2">
+            <div id="payment-modal-text" class="w-full px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-xs text-gray-900 dark:text-white whitespace-pre-line leading-relaxed"></div>
+            <button onclick="QuotesModule.copyPaymentText()" title="Copia testo" class="p-2 border border-gray-200 dark:border-gray-600 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 shrink-0">
+              <i data-lucide="copy" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-gray-100 dark:border-gray-700 space-y-2">
+          <a id="payment-modal-wa-btn" href="#" target="_blank" rel="noopener" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-sm transition active:scale-95">
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            <span>Invia su WhatsApp</span>
+          </a>
+
+          <button id="payment-modal-mail-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-sm transition active:scale-95">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+            <span>Invia via Email</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE: UPGRADE A PRO -->
+  <div id="upgrade-modal" class="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-md p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60 text-center">
+      <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 text-white flex items-center justify-center mx-auto mb-3 shadow-lg">
+        <i data-lucide="crown" class="w-8 h-8"></i>
+      </div>
+      <h3 class="text-xl font-black text-gray-900 dark:text-white">Funzione Pro</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        <span id="upgrade-feature-name">Questa funzione</span> è disponibile nel piano <b class="text-amber-600">Pro</b>.
+      </p>
+
+      <div class="mt-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl p-3.5 text-left text-xs text-gray-700 dark:text-gray-200 space-y-1.5">
+        <p class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Clienti e preventivi illimitati</p>
+        <p class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Firma digitale, foto, agenda e campagne email</p>
+        <p class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Logo personalizzato e link di pagamento</p>
+        <p class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-600"></i> Solo <b>7,99 €/mese</b> o <b>79,90 €/anno</b></p>
+      </div>
+
+      <div class="mt-5 space-y-2">
+        <button onclick="App.goToLanding()" class="w-full px-4 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-sm font-bold rounded-xl shadow-sm transition active:scale-95">
+          Passa a Pro
+        </button>
+        <button onclick="App.switchTab('settings')" class="w-full px-4 py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 text-gray-700 dark:text-gray-200 text-sm font-semibold rounded-xl transition">
+          Ho un codice invito
+        </button>
+        <button onclick="App.closeUpgradeModal()" class="w-full px-4 py-2 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
+          Non ora, continua gratis
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE: CONSENSO PRIVACY INIZIALE -->
+  <div id="consent-modal" class="fixed inset-0 z-[70] bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-md p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60">
+      <div class="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="shield-check" class="w-8 h-8"></i>
+      </div>
+      <h3 class="text-lg font-black text-gray-900 dark:text-white text-center">Privacy e Trattamento Dati</h3>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center leading-relaxed">
+        Prima di utilizzare Stima, ti chiediamo di leggere e accettare i documenti.
+        I tuoi dati restano salvati sul tuo dispositivo.
+      </p>
+
+      <div class="mt-4 space-y-3">
+        <label class="flex items-start gap-2.5 p-3 bg-gray-50 dark:bg-gray-700/40 rounded-xl cursor-pointer">
+          <input type="checkbox" id="consent-privacy" class="mt-0.5 w-4 h-4 rounded text-blue-600 cursor-pointer">
+          <span class="text-xs text-gray-700 dark:text-gray-200 leading-snug flex-1">
+            Ho letto e accetto la <b>Privacy Policy</b> e il trattamento dei miei dati personali.
+          </span>
+          <a href="privacy.html" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline shrink-0">Leggi</a>
+        </label>
+        <label class="flex items-start gap-2.5 p-3 bg-gray-50 dark:bg-gray-700/40 rounded-xl cursor-pointer">
+          <input type="checkbox" id="consent-dpa" class="mt-0.5 w-4 h-4 rounded text-blue-600 cursor-pointer">
+          <span class="text-xs text-gray-700 dark:text-gray-200 leading-snug flex-1">
+            Accetto la nomina di Stima come <b>Responsabile del Trattamento (art. 28 GDPR)</b> per i dati dei miei clienti.
+          </span>
+          <a href="dpa.html" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline shrink-0">Leggi</a>
+        </label>
+        <label class="flex items-start gap-2.5 p-3 bg-gray-50 dark:bg-gray-700/40 rounded-xl cursor-pointer">
+          <input type="checkbox" id="consent-terms" class="mt-0.5 w-4 h-4 rounded text-blue-600 cursor-pointer">
+          <span class="text-xs text-gray-700 dark:text-gray-200 leading-snug flex-1">
+            Ho letto e accetto i <b>Termini di Servizio</b>.
+          </span>
+          <a href="termini.html" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline shrink-0">Leggi</a>
+        </label>
+      </div>
+
+      <button id="consent-accept-btn" onclick="App.acceptConsent()" disabled class="mt-5 w-full px-4 py-3 bg-blue-600 text-white text-sm font-bold rounded-xl shadow-sm transition opacity-50 cursor-not-allowed">
+        Accetta e continua
+      </button>
+    </div>
+  </div>
+
+  <!-- MODALE: ONBOARDING FATTURAZIONE ELETTRONICA -->
+  <div id="fe-consent-modal" class="fixed inset-0 z-[70] bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-md p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 flex items-center justify-center">
+            <i data-lucide="file-code-2" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-gray-900 dark:text-white">Fatturazione Elettronica</h3>
+        </div>
+        <button onclick="FatturaPAModule.closeFeConsent()" class="text-gray-400 hover:text-gray-600 rounded-lg p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 leading-relaxed">
+        Prima di generare fatture elettroniche (FatturaPA), confermi di:
+      </p>
+
+      <ul class="mt-3 space-y-2 text-xs text-gray-700 dark:text-gray-200">
+        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i> Aver informato i propri clienti sul trattamento dei dati fiscali.</li>
+        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i> Disporre di base giuridica per la trasmissione (obbligo di fatturazione).</li>
+        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i> Non inserire dati sensibili nelle descrizioni delle prestazioni.</li>
+        <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-500 shrink-0"></i> Aver nominato Stima responsabile del trattamento (art. 28 GDPR).</li>
+      </ul>
+
+      <label class="flex items-start gap-2.5 p-3 mt-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl cursor-pointer">
+        <input type="checkbox" id="fe-consent-check" class="mt-0.5 w-4 h-4 rounded text-indigo-600 cursor-pointer">
+        <span class="text-xs text-gray-700 dark:text-gray-200 leading-snug">
+          Confermo di aver letto e di rispettare questi obblighi.
+        </span>
+      </label>
+
+      <button onclick="FatturaPAModule.acceptFeConsent()" class="mt-4 w-full px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl shadow-sm transition">
+        Conferma e attiva
+      </button>
+    </div>
+  </div>
+
+  <!-- MODALE: LOGIN / REGISTRAZIONE -->
+  <div id="auth-modal" class="fixed inset-0 z-[70] bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-md p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+            <i data-lucide="user-round" class="w-5 h-5"></i>
+          </div>
+          <h3 id="auth-modal-title" class="text-base font-bold text-gray-900 dark:text-white">Accedi</h3>
+        </div>
+        <button onclick="Auth.closeModal()" class="text-gray-400 hover:text-gray-600 rounded-lg p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 leading-relaxed">
+        Accedi per salvare i tuoi dati nel cloud e usarli su tutti i tuoi dispositivi.
+      </p>
+
+      <form onsubmit="Auth.submit(event)" class="mt-4 space-y-3">
+        <div id="auth-message" class="hidden text-xs font-medium px-3 py-2.5 rounded-xl"></div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Email</label>
+          <input type="email" id="auth-email" required placeholder="nome@email.it" autocomplete="email"
+                 class="w-full px-3 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">Password</label>
+          <input type="password" id="auth-password" required placeholder="••••••••" autocomplete="current-password"
+                 class="w-full px-3 py-2.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <button id="auth-submit-btn" type="submit"
+                class="w-full px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl shadow-sm transition active:scale-95">
+          Accedi
+        </button>
+
+        <div class="text-right">
+          <a href="#" onclick="Auth.forgotPassword();return false;" class="text-xs text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition">Password dimenticata?</a>
+        </div>
+      </form>
+
+      <p id="auth-footer" class="mt-4 text-xs text-center text-gray-500 dark:text-gray-400"></p>
+    </div>
+  </div>
+
+  <!-- MODALE: CONDIVIDI E GUADAGNA (REFERRAL) -->
+  <div id="share-modal" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-md p-6 shadow-2xl border border-gray-100 dark:border-gray-700/60">
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+        <div class="flex items-center gap-2">
+          <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-900/30 text-purple-600 flex items-center justify-center">
+            <i data-lucide="gift" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-gray-900 dark:text-white">Invita e guadagna</h3>
+        </div>
+        <button onclick="SettingsModule.closeShareModal()" class="text-gray-400 hover:text-gray-600 rounded-lg p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="mt-4">
+        <p class="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">
+          Condividi il tuo codice: quando chi lo usa <b>inizia a pagare</b> l'abbonamento, ricevi <b class="text-purple-600">2 mesi di Pro gratis</b>. 🎁
+        </p>
+
+        <div class="mt-4 flex items-center gap-2">
+          <span id="share-referral-code" class="flex-1 px-3 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-base font-mono font-bold text-center text-purple-700 dark:text-purple-300 tracking-wider"></span>
+          <button onclick="SettingsModule.copyShareCode()" title="Copia codice" class="p-2.5 border border-gray-200 dark:border-gray-600 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300">
+            <i data-lucide="copy" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <div class="mt-4 space-y-2">
+          <button onclick="SettingsModule.shareWhatsApp()" class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold rounded-xl shadow-sm transition active:scale-95">
+            <i data-lucide="message-circle" class="w-5 h-5"></i>
+            <span>Condividi su WhatsApp</span>
+          </button>
+          <button onclick="SettingsModule.copyShareMessage()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 text-sm font-semibold rounded-xl transition">
+            <i data-lucide="clipboard-copy" class="w-4 h-4"></i>
+            <span>Copia messaggio e codice</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Entry point Vite (importa tutti i moduli) -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

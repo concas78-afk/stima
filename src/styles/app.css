@@ -1,0 +1,68 @@
+/* Stili personalizzati e ottimizzazioni per Stima */
+
+/* Scrollbar sottile e moderna */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.4);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.7);
+}
+
+/* Transizioni fluide */
+.view-section {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stili specifici per la Stampa A4 del Preventivo / Esportazione PDF */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  #printable-quote-area, #printable-quote-area * {
+    visibility: visible;
+  }
+  
+  #printable-quote-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 20mm;
+    background: #ffffff !important;
+    color: #111827 !important;
+    box-shadow: none !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Protezione area safe per smartphone moderni (iPhone Notch & Home Indicator) */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 1rem);
+}

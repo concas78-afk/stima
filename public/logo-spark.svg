@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Stima - spunta e scintilla">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="16" fill="url(#g)"/>
+  <path d="M15 43 L26 54 L49 31" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M44 12 L45 18 L51 19 L45 20 L44 26 L43 20 L37 19 L43 18 Z" fill="#ffffff"/>
+</svg>
