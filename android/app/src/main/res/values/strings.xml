@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Stima</string>
+    <string name="title_activity_main">Stima</string>
+    <string name="package_name">it.stima.app</string>
+    <string name="custom_url_scheme">it.stima.app</string>
+</resources>

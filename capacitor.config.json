@@ -1,8 +1,7 @@
 {
-  "appId": "com.quickcraft.crm",
-  "appName": "QuickCraft CRM",
+  "appId": "it.stima.app",
+  "appName": "Stima",
   "webDir": "dist",
-  "bundledWebRuntime": false,
   "server": {
     "androidScheme": "https"
   }

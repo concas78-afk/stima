@@ -1,18 +1,25 @@
 {
-  "name": "quickcraft-crm",
+  "name": "stima",
   "version": "1.0.0",
-  "description": "QuickCraft CRM - Micro CRM & Preventivi Veloci per Artigiani e Freelance",
+  "description": "Stima - Micro-CRM & Preventivi Veloci per Artigiani e Professionisti",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "cap:sync": "npm run build && cap sync",
+    "cap:android": "npm run build && cap sync && cap open android",
+    "cap:ios": "npm run build && cap sync && cap open ios"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
     "@supabase/supabase-js": "^2.118.0"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "opentype.js": "^2.0.0",
     "sharp": "^0.35.5",
     "vite": "^6.0.0"
