@@ -39,8 +39,19 @@ export const Auth = {
   // UI stato account (sidebar desktop + header mobile)
   // ───────────────────────────────────────────────────────────────
   renderAccountUI() {
-    const email = this._user?.email || '';
     const loggedIn = !!this._user;
+
+    // Backend cloud non configurato: nascondi la sezione account.
+    // L'app funziona comunque in locale, senza login.
+    if (!Supabase.isConfigured() && !loggedIn) {
+      const d = document.getElementById('account-desktop');
+      if (d) d.innerHTML = '';
+      const m = document.getElementById('account-mobile');
+      if (m) m.innerHTML = '';
+      return;
+    }
+
+    const email = this._user?.email || '';
 
     const loggedOutHtml = `
       <button onclick="Auth.openModal()" class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition">

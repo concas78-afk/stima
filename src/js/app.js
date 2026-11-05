@@ -9,7 +9,7 @@ import { CampaignsModule } from './campaigns.js';
 import { SettingsModule } from './settings.js';
 import { PricebookModule } from './pricebook.js';
 import { AgendaModule } from './agenda.js';
-import { APP_CONFIG } from './config.js';
+import { APP_CONFIG, escapeHtml } from './config.js';
 import { Auth } from './auth.js';
 import { InvoicesModule } from './invoices.js';
 
@@ -256,9 +256,9 @@ export const App = {
         <div>
           <span class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Pannello di Controllo</span>
           <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mt-0.5">
-            Bentornato, ${settings.ownerName || 'Professionista'}
+            ${settings.ownerName && settings.ownerName !== 'Marco Rossi' ? `Bentornato, ${escapeHtml(settings.ownerName)}` : 'Benvenuto!'}
           </h2>
-          <p class="text-sm text-gray-500 dark:text-gray-400">${settings.businessName || 'La tua attività'}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">${escapeHtml(settings.businessName || 'Configura la tua attività nelle Impostazioni')}</p>
         </div>
         
         <div class="flex items-center gap-2">

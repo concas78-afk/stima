@@ -392,10 +392,11 @@ export const SettingsModule = {
               Cloud & Sincronizzazione
             </h3>
             <p id="sync-status" class="text-xs text-gray-500 dark:text-gray-400 mb-4">Verifica dello stato…</p>
+            ${(window.Supabase && window.Supabase.isConfigured()) ? `
             <button onclick="Sync.manualSync()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 text-sm font-semibold rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/40 transition">
               <i data-lucide="refresh-cw" class="w-4 h-4"></i>
               <span>Sincronizza ora</span>
-            </button>
+            </button>` : ''}
           </div>
 
           <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700/60 p-6 shadow-sm">
@@ -429,14 +430,19 @@ export const SettingsModule = {
           <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700/60 p-6 shadow-sm">
             <h3 class="text-sm font-bold text-gray-900 dark:text-white mb-2 text-red-600 flex items-center gap-2">
               <i data-lucide="alert-triangle" class="w-4 h-4"></i>
-              Dati Demo
+              Dati
             </h3>
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-              Vuoi ricaricare i clienti e i preventivi di esempio?
+              Ricarica i dati di esempio oppure cancella tutto per iniziare da zero.
             </p>
-            <button onclick="SettingsModule.resetDemo()" class="w-full px-4 py-2 border border-red-200 dark:border-red-900/60 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-xs font-semibold rounded-xl transition">
-              Ripristina Dati Dimostrativi
-            </button>
+            <div class="space-y-2">
+              <button onclick="SettingsModule.resetDemo()" class="w-full px-4 py-2 border border-red-200 dark:border-red-900/60 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-xs font-semibold rounded-xl transition">
+                Ripristina Dati Dimostrativi
+              </button>
+              <button onclick="SettingsModule.clearAll()" class="w-full px-4 py-2 border border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 hover:bg-red-100 text-xs font-semibold rounded-xl transition">
+                Cancella tutti i dati
+              </button>
+            </div>
           </div>
         </div>
 
@@ -527,6 +533,16 @@ export const SettingsModule = {
       this.render();
       App.renderDashboard();
       App.showToast('Dati demo ricaricati', 'info');
+    }
+  },
+
+  // Cancella tutti i dati e riparte da zero (profilo pulito)
+  clearAll() {
+    if (confirm('Sei sicuro di voler cancellare TUTTI i dati (clienti, preventivi, agenda, listino e impostazioni)? L\'operazione non può essere annullata.')) {
+      DB.resetEmpty();
+      this.render();
+      App.renderDashboard();
+      App.showToast('Tutti i dati sono stati cancellati', 'info');
     }
   },
 

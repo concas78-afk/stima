@@ -104,6 +104,10 @@ export const Sync = {
   async renderStatus() {
     const el = document.getElementById('sync-status');
     if (!el) return;
+    if (!Supabase.isConfigured()) {
+      el.innerHTML = 'Modalità locale: i dati sono salvati solo su questo dispositivo.';
+      return;
+    }
     const user = await Supabase.getUser();
     if (user) {
       el.innerHTML = `Account connesso: <b>${escapeHtml(user.email)}</b>. Le modifiche si salvano automaticamente nel cloud.`;

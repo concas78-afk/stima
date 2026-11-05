@@ -40,6 +40,31 @@ const DEMO_SETTINGS = {
   remindUnpaid: true
 };
 
+// Impostazioni iniziali VUOTE per un nuovo utente reale (niente identità fittizia).
+// Mantiene solo i valori di default utili (regime fiscale, note, promemoria).
+const EMPTY_SETTINGS = {
+  businessName: '',
+  ownerName: '',
+  taxId: '',
+  vatNumber: '',
+  phone: '',
+  email: '',
+  address: '',
+  cap: '',
+  city: '',
+  province: '',
+  nation: 'IT',
+  pec: '',
+  accountantEmail: '',
+  iban: '',
+  taxRegime: 'ordinario',
+  withholdingTax: 0,
+  defaultNotes: 'Validità preventivo: 30 giorni. Pagamento all\'accettazione e saldo a fine lavori tramite bonifico bancario.',
+  remindQuoteDays: 7,
+  remindUnsent: true,
+  remindUnpaid: true
+};
+
 const DEMO_CLIENTS = [
   {
     id: 'cli_1',
@@ -214,7 +239,8 @@ const DEMO_QUOTES = [
 export const DB = {
   init() {
     if (!localStorage.getItem(DB_KEYS.INIT)) {
-      this.resetDemo();
+      // Nuovo utente reale: parti con dati puliti (nessuna identità/demo fittizia)
+      this.resetEmpty();
     } else {
       // Se già inizializzato da versione precedente, assicura che listino e agenda esistano
       if (!localStorage.getItem(DB_KEYS.PRICEBOOK)) {
@@ -260,6 +286,16 @@ export const DB = {
     this._setItem(DB_KEYS.QUOTES, JSON.stringify(DEMO_QUOTES));
     this._setItem(DB_KEYS.PRICEBOOK, JSON.stringify(DEMO_PRICEBOOK));
     this._setItem(DB_KEYS.APPOINTMENTS, JSON.stringify(DEMO_APPOINTMENTS));
+    this._setItem(DB_KEYS.INIT, 'true');
+  },
+
+  // Azzera tutti i dati e riparte con un profilo pulito (nessun dato demo)
+  resetEmpty() {
+    this._setItem(DB_KEYS.SETTINGS, JSON.stringify(EMPTY_SETTINGS));
+    this._setItem(DB_KEYS.CLIENTS, JSON.stringify([]));
+    this._setItem(DB_KEYS.QUOTES, JSON.stringify([]));
+    this._setItem(DB_KEYS.PRICEBOOK, JSON.stringify([]));
+    this._setItem(DB_KEYS.APPOINTMENTS, JSON.stringify([]));
     this._setItem(DB_KEYS.INIT, 'true');
   },
 
