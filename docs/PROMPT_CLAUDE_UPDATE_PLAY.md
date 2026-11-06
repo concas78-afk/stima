@@ -10,11 +10,11 @@ Sono già loggato nel Play Console.
 
 CONTESTO
 - App: Stima
-- Devo sostituire la versione precedente con una NUOVA versione (versionCode 4, versionName 1.0.3).
+- Devo sostituire la versione precedente con una NUOVA versione (versionCode 6, versionName 1.0.5).
 - Il file da caricare è:
-  C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.3.aab
-- La modifica rispetto alla versione precedente: correzione della barra di navigazione su Android
-  (i pulsanti non si sovrappongono più ai tasti di sistema).
+  C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.5.aab
+- Contiene diverse correzioni: avvio con dati puliti (niente dati demo), barra di navigazione Android,
+  login/cloud riattivato, pulsanti WhatsApp/Email sempre visibili e spunta "Lavoro eseguito".
 
 REGOLE IMPORTANTI
 1. Non inviare MAI in revisione (né premere "Pubblica" / "Invia in revisione") senza la mia
@@ -37,13 +37,13 @@ PROCEDURA
    - Se c'è già il vecchio AAB, scegli di SOSTITUIRLO / AGGIORNARLO (se chiede di scartare
      la bozza, chiedimi prima).
    - Fermati e dimmi di selezionare questo file:
-     C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.3.aab
+     C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.5.aab
 5. Verifica che il Play Console mostri:
-   - versionCode: 4
-   - versionName: 1.0.3
+   - versionCode: 6
+   - versionName: 1.0.5
    (Se mostra ancora 1 / 1.0, dimmelo: significa che è stato caricato il file vecchio.)
 6. Nelle "Note di rilascio" (release notes) scrivi:
-   "Correzioni: avvio con dati puliti (rimossi i dati demo), barra di navigazione Android e login/cloud riattivato."
+   "Correzioni: avvio con dati puliti, barra di navigazione Android, login/cloud riattivato, condivisione WhatsApp/Email e spunta Lavoro eseguito."
 7. Salva (Save).
 8. NON inviare in revisione. Mostrami un riepilogo di cosa manca e aspetta la mia conferma
    esplicita prima di procedere.
@@ -62,13 +62,17 @@ NOTE
 Quando Claude te lo chiede, seleziona:
 
 ```
-C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.3.aab
+C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.5.aab
 ```
 
-> ⚠️ **Attenzione**: nella cartella c'è ancora anche il vecchio `Stima-1.0.aab`. Scegli quello **1.0.1**!
+> ⚠️ **Attenzione**: nella cartella ci sono anche i vecchi AAB. Scegli quello **1.0.5**!
 
 ## ✅ Cosa cambia
 
-- **versionCode 2** (necessario: Google non accetta due volte lo stesso numero)
-- **versionName 1.0.1**
-- Fix della barra di navigazione Android
+- **versionCode 6** (necessario: Google non accetta due volte lo stesso numero)
+- **versionName 1.0.5**
+- Fix barra di navigazione Android
+- Avvio con dati puliti (niente demo)
+- Login/cloud riattivato
+- Pulsanti WhatsApp/Email sempre visibili
+- Spunta "Lavoro eseguito" nella lista preventivi
