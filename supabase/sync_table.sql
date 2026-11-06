@@ -12,5 +12,6 @@ create table if not exists public.user_data (
 
 alter table public.user_data enable row level security;
 
+drop policy if exists "own data" on public.user_data;
 create policy "own data" on public.user_data
   for all using (profile_id = auth.uid()) with check (profile_id = auth.uid());

@@ -128,21 +128,28 @@ alter table public.pricebook     enable row level security;
 alter table public.appointments  enable row level security;
 alter table public.subscriptions enable row level security;
 
+-- Le policy vengono ricreate in modo sicuro (idempotente): si possono rieseguire.
+drop policy if exists "own profile" on public.profiles;
 create policy "own profile" on public.profiles
   for all using (id = auth.uid()) with check (id = auth.uid());
 
+drop policy if exists "own clients" on public.clients;
 create policy "own clients" on public.clients
   for all using (profile_id = auth.uid()) with check (profile_id = auth.uid());
 
+drop policy if exists "own quotes" on public.quotes;
 create policy "own quotes" on public.quotes
   for all using (profile_id = auth.uid()) with check (profile_id = auth.uid());
 
+drop policy if exists "own pricebook" on public.pricebook;
 create policy "own pricebook" on public.pricebook
   for all using (profile_id = auth.uid()) with check (profile_id = auth.uid());
 
+drop policy if exists "own appointments" on public.appointments;
 create policy "own appointments" on public.appointments
   for all using (profile_id = auth.uid()) with check (profile_id = auth.uid());
 
+drop policy if exists "own subscription" on public.subscriptions;
 create policy "own subscription" on public.subscriptions
   for all using (profile_id = auth.uid()) with check (profile_id = auth.uid());
 
@@ -184,5 +191,6 @@ create table if not exists public.user_data (
 
 alter table public.user_data enable row level security;
 
+drop policy if exists "own data" on public.user_data;
 create policy "own data" on public.user_data
   for all using (profile_id = auth.uid()) with check (profile_id = auth.uid());
