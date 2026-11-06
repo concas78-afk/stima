@@ -149,6 +149,8 @@ export const QuotesModule = {
 
     const hasSignature = !!quote.signatureData;
     const photosCount = (quote.photos || []).length;
+    // Lavoro eseguito = stato "Eseguito" oppure "Saldato" (pagato ⇒ eseguito)
+    const isWorkDone = quote.status === 'Eseguito' || quote.status === 'Saldato';
 
     return `
       <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700/60 p-4 sm:p-5 shadow-sm hover:shadow-md transition">
@@ -194,7 +196,12 @@ export const QuotesModule = {
             </div>
 
             <!-- Pulsanti di azione -->
-            <div class="flex items-center gap-1">
+            <div class="flex items-center gap-1 flex-wrap justify-end">
+              <!-- Spunta rapida: lavoro eseguito -->
+              <label class="flex items-center gap-1 px-1.5 py-1 rounded-lg cursor-pointer ${isWorkDone ? 'text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/20' : 'text-gray-400 hover:text-cyan-600'} ${quote.status === 'Saldato' ? 'opacity-70 cursor-default' : ''}" title="${quote.status === 'Saldato' ? 'Lavoro eseguito e saldato' : (isWorkDone ? 'Lavoro eseguito (clic per annullare)' : 'Segna il lavoro come eseguito')}">
+                <input type="checkbox" ${isWorkDone ? 'checked' : ''} ${quote.status === 'Saldato' ? 'disabled' : ''} onchange="QuotesModule.toggleWorkDone('${quote.id}')" class="w-4 h-4 rounded text-cyan-600 focus:ring-cyan-500 cursor-pointer disabled:cursor-default">
+                <span class="text-[11px] font-semibold whitespace-nowrap">Eseguito</span>
+              </label>
               <button onclick="QuotesModule.openPaymentModal('${quote.id}')" title="Invia link di pagamento" class="p-2 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-xl transition">
                 <i data-lucide="credit-card" class="w-4 h-4"></i>
               </button>
@@ -227,6 +234,22 @@ export const QuotesModule = {
   setFilter(status) {
     this.currentFilter = status;
     this.render();
+  },
+
+  // Spunta rapida dalla lista: segna/annulla "lavoro eseguito"
+  toggleWorkDone(quoteId) {
+    const quote = DB.getQuoteById(quoteId);
+    if (!quote) return;
+    if (quote.status === 'Saldato') return; // già saldato: non si tocca da qui
+    const wasDone = quote.status === 'Eseguito';
+    quote.status = wasDone ? 'Approvato' : 'Eseguito';
+    DB.saveQuote(quote);
+    App.showToast(
+      wasDone ? 'Lavoro segnato come NON eseguito' : 'Lavoro segnato come eseguito ✓',
+      wasDone ? 'info' : 'success'
+    );
+    this.render();
+    App.renderDashboard();
   },
 
   handleSearch(query) {
