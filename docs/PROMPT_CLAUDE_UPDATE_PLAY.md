@@ -10,9 +10,9 @@ Sono già loggato nel Play Console.
 
 CONTESTO
 - App: Stima
-- Devo sostituire la versione precedente con una NUOVA versione (versionCode 3, versionName 1.0.2).
+- Devo sostituire la versione precedente con una NUOVA versione (versionCode 4, versionName 1.0.3).
 - Il file da caricare è:
-  C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.2.aab
+  C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.3.aab
 - La modifica rispetto alla versione precedente: correzione della barra di navigazione su Android
   (i pulsanti non si sovrappongono più ai tasti di sistema).
 
@@ -37,13 +37,13 @@ PROCEDURA
    - Se c'è già il vecchio AAB, scegli di SOSTITUIRLO / AGGIORNARLO (se chiede di scartare
      la bozza, chiedimi prima).
    - Fermati e dimmi di selezionare questo file:
-     C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.2.aab
+     C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.3.aab
 5. Verifica che il Play Console mostri:
-   - versionCode: 3
-   - versionName: 1.0.2
+   - versionCode: 4
+   - versionName: 1.0.3
    (Se mostra ancora 1 / 1.0, dimmelo: significa che è stato caricato il file vecchio.)
 6. Nelle "Note di rilascio" (release notes) scrivi:
-   "Correzioni: avvio con dati puliti (rimossi i dati demo), barra di navigazione Android e modalità cloud."
+   "Correzioni: avvio con dati puliti (rimossi i dati demo), barra di navigazione Android e login/cloud riattivato."
 7. Salva (Save).
 8. NON inviare in revisione. Mostrami un riepilogo di cosa manca e aspetta la mia conferma
    esplicita prima di procedere.
@@ -62,7 +62,7 @@ NOTE
 Quando Claude te lo chiede, seleziona:
 
 ```
-C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.2.aab
+C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.3.aab
 ```
 
 > ⚠️ **Attenzione**: nella cartella c'è ancora anche il vecchio `Stima-1.0.aab`. Scegli quello **1.0.1**!

@@ -27,12 +27,10 @@ export const APP_CONFIG = {
   // La service_role key NON va mai messa qui: sta solo nelle Edge Functions.
   // ═══════════════════════════════════════════════════════════════
   supabase: {
-    // ⚠️ Backend cloud NON attivo: l'app funziona in locale (localStorage).
-    // Il vecchio progetto Supabase non è più raggiungibile.
-    // Per riattivare login e sincronizzazione, incolla qui il nuovo URL e la
-    // anon key di un progetto Supabase attivo (e riattiva lo schema in supabase/).
-    url: '',
-    anonKey: '',
+    // Backend cloud ATTIVO: login e sincronizzazione su più dispositivi.
+    // Project URL + publishable key del nuovo progetto Supabase.
+    url: 'https://kutigdgtdyqzoofirnav.supabase.co',
+    anonKey: 'sb_publishable_9E28lb11-_Wo4ZmB2YNvTQ_OUaXT2Vh',
   },
 };
 
