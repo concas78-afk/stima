@@ -198,16 +198,12 @@ export const QuotesModule = {
               <button onclick="QuotesModule.openPaymentModal('${quote.id}')" title="Invia link di pagamento" class="p-2 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-xl transition">
                 <i data-lucide="credit-card" class="w-4 h-4"></i>
               </button>
-              ${cleanPhone ? `
-                <a href="${waUrl}" target="_blank" rel="noopener" title="Invia su WhatsApp" class="p-2 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-xl transition">
-                  <i data-lucide="message-circle" class="w-4 h-4"></i>
-                </a>
-              ` : ''}
-              ${client.email ? `
-                <button onclick="QuotesModule.openEmailModal('${quote.id}')" title="Invia Preventivo via Email" class="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-xl transition">
-                  <i data-lucide="mail" class="w-4 h-4"></i>
-                </button>
-              ` : ''}
+              <a href="${cleanPhone ? waUrl : `https://wa.me/?text=${waText}`}" target="_blank" rel="noopener" title="${cleanPhone ? 'Invia su WhatsApp' : 'Condividi su WhatsApp (scegli il contatto)'}" class="p-2 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-xl transition">
+                <i data-lucide="message-circle" class="w-4 h-4"></i>
+              </a>
+              <button onclick="QuotesModule.openEmailModal('${quote.id}')" title="Invia Preventivo via Email" class="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-xl transition">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+              </button>
               <button onclick="QuotesModule.openSignatureModal('${quote.id}')" title="Fai Firmare sullo Schermo" class="p-2 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/30 rounded-xl transition">
                 <i data-lucide="pen-tool" class="w-4 h-4"></i>
               </button>
@@ -840,10 +836,11 @@ export const QuotesModule = {
   openEmailModal(quoteId) {
     const quote = DB.getQuoteById(quoteId);
     if (!quote) return;
-    const client = DB.getClientById(quote.clientId);
-    if (!client || !client.email) {
-      App.showToast('Questo cliente non ha un indirizzo email registrato. Modifica la scheda cliente per aggiungerlo!', 'error');
-      return;
+    const client = DB.getClientById(quote.clientId) || { name: 'Cliente' };
+    // L'email può essere vuota: l'utente la inserisce direttamente nel modale.
+    const clientEmail = client.email || '';
+    if (!clientEmail) {
+      App.showToast("Suggerimento: aggiungi l'email nella scheda cliente per precompilarla.", 'info');
     }
     const settings = DB.getSettings();
     const totals = DB.calculateQuoteTotals(quote, settings.taxRegime === 'forfettario');
@@ -868,12 +865,12 @@ ${settings.phone ? `Tel. ${settings.phone}` : ''}`;
     const modal = document.getElementById('email-quote-modal');
     if (!modal) return;
 
-    document.getElementById('email-modal-to').value = client.email;
+    document.getElementById('email-modal-to').value = clientEmail;
     document.getElementById('email-modal-subject').value = subjectText;
     document.getElementById('email-modal-body').value = bodyText;
 
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(client.email)}&su=${encodeURIComponent(subjectText)}&body=${encodeURIComponent(bodyText)}`;
-    const mailtoUrl = `mailto:${client.email}?subject=${encodeURIComponent(subjectText)}&body=${encodeURIComponent(bodyText)}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(clientEmail)}&su=${encodeURIComponent(subjectText)}&body=${encodeURIComponent(bodyText)}`;
+    const mailtoUrl = `mailto:${clientEmail}?subject=${encodeURIComponent(subjectText)}&body=${encodeURIComponent(bodyText)}`;
 
     document.getElementById('email-modal-gmail-btn').onclick = () => {
       window.open(gmailUrl, '_blank');
