@@ -11,11 +11,19 @@ import { escapeHtml } from './config.js';
 export const PdfModule = {
   currentQuoteId: null,
 
+  // Formatta una data ISO in gg/mm/aaaa
+  _fmtDate(v) {
+    if (!v) return '';
+    const s = String(v).split('T')[0];
+    return s ? s.split('-').reverse().join('/') : '';
+  },
+
   preview(quoteId) {
     this.currentQuoteId = quoteId;
     const quote = DB.getQuoteById(quoteId);
     if (!quote) return;
 
+    const isInvoice = !!quote.invoiceNumber;
     const client = DB.getClientById(quote.clientId) || { name: 'Cliente', company: '', address: '', taxId: '' };
     const settings = DB.getSettings();
     const totals = DB.calculateQuoteTotals(quote, settings.taxRegime === 'forfettario');
@@ -45,13 +53,13 @@ export const PdfModule = {
         </div>
 
         <div class="text-right">
-          <div class="inline-block bg-gray-900 text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-widest mb-2">
-            PREVENTIVO
+          <div class="inline-block ${isInvoice ? 'bg-indigo-700' : 'bg-gray-900'} text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-widest mb-2">
+            ${isInvoice ? 'FATTURA' : 'PREVENTIVO'}
           </div>
-          <p class="text-lg font-bold text-gray-900">${quote.number}</p>
+          <p class="text-lg font-bold text-gray-900">${escapeHtml(isInvoice ? (quote.invoiceNumber || '') : (quote.number || ''))}</p>
           <div class="text-xs text-gray-600 mt-1">
-            <p>Data: <span class="font-medium text-gray-900">${quote.date}</span></p>
-            ${quote.dueDate ? `<p>Validità: <span class="font-medium text-gray-900">${quote.dueDate}</span></p>` : ''}
+            <p>Data: <span class="font-medium text-gray-900">${escapeHtml(this._fmtDate(isInvoice ? (quote.invoicedAt || quote.date) : quote.date))}</span></p>
+            ${quote.dueDate ? `<p>${isInvoice ? 'Scadenza' : 'Validità'}: <span class="font-medium text-gray-900">${escapeHtml(this._fmtDate(quote.dueDate))}</span></p>` : ''}
           </div>
         </div>
       </div>
@@ -136,7 +144,7 @@ export const PdfModule = {
             <span>€ ${totals.grandTotal.toFixed(2)}</span>
           </div>
 
-          ${totals.depositAmount > 0 ? `
+          ${!isInvoice && totals.depositAmount > 0 ? `
             <div class="mt-2 pt-2 border-t border-dashed border-gray-300 bg-gray-50 p-2.5 rounded-lg space-y-1">
               <div class="flex justify-between font-bold text-gray-900">
                 <span>Acconto alla conferma${QuotesModule.formatDepositPct(totals)}:</span>
@@ -165,8 +173,8 @@ export const PdfModule = {
         </div>
       ` : ''}
 
-      <!-- Note, Coordinate e Firma Digitale / Cartacea -->
-      <div class="grid grid-cols-2 gap-6 pt-4 border-t border-gray-200 text-xs">
+      <!-- Note, Coordinate e Firma Digitale / Cartacea (firma solo per i preventivi) -->
+      <div class="${isInvoice ? '' : 'grid grid-cols-2 gap-6'} pt-4 border-t border-gray-200 text-xs">
         <div>
           ${settings.iban ? `
             <div class="mb-3">
@@ -191,6 +199,7 @@ export const PdfModule = {
           ` : ''}
         </div>
 
+        ${!isInvoice ? `
         <div class="flex flex-col justify-end text-center">
           <div class="border-b border-gray-400 pb-1 mb-1 mx-6 h-16 flex items-center justify-center">
             ${quote.signatureData ? `
@@ -201,6 +210,7 @@ export const PdfModule = {
             ${quote.signatureData ? 'Firmato digitalmente per accettazione dal Committente' : 'Firma per accettazione del Committente'}
           </p>
         </div>
+        ` : ''}
       </div>
     `;
 

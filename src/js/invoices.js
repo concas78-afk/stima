@@ -10,6 +10,7 @@ import { FatturaPAModule } from './fatturapa.js';
 import { App } from './app.js';
 import { ClientsModule } from './clients.js';
 import { escapeHtml } from './config.js';
+import JSZip from 'jszip';
 
 const SENT_TYPES = [
   { key: 'client', field: 'sentToClientAt', label: 'Cliente' },
@@ -56,6 +57,9 @@ export const InvoicesModule = {
     const filtered = periodInvoices.filter(q => {
       if (this.filterStatus === 'da_incassare' && q.status === 'Saldato') return false;
       if (this.filterStatus === 'incassato' && q.status !== 'Saldato') return false;
+      if (this.filterStatus === 'da_cliente' && q.sentToClientAt) return false;
+      if (this.filterStatus === 'da_commercialista' && q.sentToAccountantAt) return false;
+      if (this.filterStatus === 'da_sdi' && q.sentToSdiAt) return false;
       return true;
     });
 
@@ -106,6 +110,16 @@ export const InvoicesModule = {
           <button onclick="InvoicesModule.setFilter('incassato')" class="px-3 py-2 rounded-lg font-medium whitespace-nowrap transition ${this.filterStatus === 'incassato' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100'}">
             Incassate
           </button>
+          <span class="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1"></span>
+          <button onclick="InvoicesModule.setFilter('da_cliente')" class="px-3 py-2 rounded-lg font-medium whitespace-nowrap transition ${this.filterStatus === 'da_cliente' ? 'bg-blue-600 text-white shadow-sm' : 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-100'}">
+            Da inviare al cliente
+          </button>
+          <button onclick="InvoicesModule.setFilter('da_commercialista')" class="px-3 py-2 rounded-lg font-medium whitespace-nowrap transition ${this.filterStatus === 'da_commercialista' ? 'bg-purple-600 text-white shadow-sm' : 'bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-100'}">
+            Da inviare al commercialista
+          </button>
+          <button onclick="InvoicesModule.setFilter('da_sdi')" class="px-3 py-2 rounded-lg font-medium whitespace-nowrap transition ${this.filterStatus === 'da_sdi' ? 'bg-amber-600 text-white shadow-sm' : 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 hover:bg-amber-100'}">
+            Da inviare allo SDI
+          </button>
         </div>
       </div>
 
@@ -152,6 +166,17 @@ export const InvoicesModule = {
         <span class="font-semibold ${sentClient ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400'}">Cliente: ${sentClient}/${periodInvoices.length}</span>
         <span class="font-semibold ${sentAccountant ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400'}">Commercialista: ${sentAccountant}/${periodInvoices.length}</span>
         <span class="font-semibold ${sentSdi ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400'}">SDI: ${sentSdi}/${periodInvoices.length}</span>
+      </div>
+
+      <!-- Azioni multiple (fine mese) -->
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">Azioni rapide:</span>
+        <button onclick="InvoicesModule.downloadAllXml()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300 hover:bg-amber-100 transition">
+          <i data-lucide="file-archive" class="w-4 h-4"></i> Scarica tutti gli XML (ZIP)
+        </button>
+        <button onclick="InvoicesModule.sendAllToAccountant()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 hover:bg-purple-100 transition">
+          <i data-lucide="send" class="w-4 h-4"></i> Invia tutti al commercialista
+        </button>
       </div>
 
       <!-- Lista fatture -->
@@ -254,6 +279,9 @@ export const InvoicesModule = {
 
         <!-- Azioni fattura: invia al cliente / commercialista / scarica XML -->
         <div class="flex flex-wrap items-center gap-1.5 mt-3">
+          <button onclick="PdfModule.preview('${q.id}')" title="Anteprima / Stampa fattura PDF" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 hover:bg-indigo-100 transition">
+            <i data-lucide="printer" class="w-3.5 h-3.5"></i> PDF
+          </button>
           <button onclick="InvoicesModule.sendInvoiceWhatsApp('${q.id}')" title="Invia la fattura al cliente su WhatsApp" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 hover:bg-emerald-100 transition">
             <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> WhatsApp
           </button>
@@ -437,5 +465,92 @@ export const InvoicesModule = {
   // Scarica il file XML da inviare allo SDI tramite il provider
   downloadXml(quoteId) {
     FatturaPAModule.download(quoteId);
+  },
+
+  // ─────────── Azioni multiple (fine mese) ───────────
+
+  // Scarica TUTTI gli XML delle fatture in un unico ZIP
+  async downloadAllXml() {
+    const quotes = DB.getQuotes().filter(q => q.invoiceNumber);
+    if (!quotes.length) {
+      App.showToast('Nessuna fattura da esportare', 'info');
+      return;
+    }
+    if (!FatturaPAModule.requireFeConsent()) return;
+
+    const zip = new JSZip();
+    let count = 0;
+    quotes.forEach(q => {
+      const res = FatturaPAModule.generate(q.id);
+      if (res && res.ok) {
+        zip.file(res.fileName, res.xml);
+        count++;
+      }
+    });
+    if (!count) {
+      App.showToast('Nessun XML generato', 'error');
+      return;
+    }
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Fatture_XML_${new Date().toISOString().split('T')[0]}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    App.showToast(`${count} XML esportati in un unico ZIP`, 'success');
+  },
+
+  // Invia in blocco al commercialista le fatture non ancora inviate
+  sendAllToAccountant() {
+    const settings = DB.getSettings();
+    const email = (settings.accountantEmail || '').trim();
+    if (!email) {
+      App.showToast("Configura prima l'email del commercialista nelle Impostazioni.", 'error');
+      return;
+    }
+    const quotes = DB.getQuotes().filter(q => q.invoiceNumber && !q.sentToAccountantAt);
+    if (!quotes.length) {
+      App.showToast('Nessuna fattura da inviare al commercialista', 'info');
+      return;
+    }
+    let total = 0;
+    const lines = quotes.map(q => {
+      const client = DB.getClientById(q.clientId) || { name: 'Cliente' };
+      const tot = DB.calculateQuoteTotals(q, settings.taxRegime === 'forfettario').grandTotal;
+      total += tot;
+      return `- Fattura ${q.invoiceNumber} - ${client.name} - € ${tot.toFixed(2)}`;
+    });
+    const subject = `Fatture elettroniche (${quotes.length})`;
+    const body = [
+      'Gentile Commercialista,',
+      '',
+      `in allegato le fatture elettroniche del periodo (${quotes.length}):`,
+      '',
+      ...lines,
+      '',
+      `Totale: € ${total.toFixed(2)}`,
+      '',
+      'Cordiali saluti,',
+      settings.ownerName || '',
+      settings.businessName || ''
+    ].join('\n');
+
+    quotes.forEach(q => {
+      q.sentToAccountantAt = new Date().toISOString();
+      DB.saveQuote(q);
+    });
+
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (email.toLowerCase().includes('@gmail.com')) {
+      window.open(gmailUrl, '_blank');
+    } else {
+      window.location.href = mailtoUrl;
+    }
+    this.render();
+    App.showToast(`${quotes.length} fatture segnate come inviate. Allega il file ZIP con gli XML.`, 'success');
   },
 };
