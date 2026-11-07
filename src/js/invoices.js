@@ -252,7 +252,24 @@ export const InvoicesModule = {
           </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2 mt-3">
+        <!-- Azioni fattura: invia al cliente / commercialista / scarica XML -->
+        <div class="flex flex-wrap items-center gap-1.5 mt-3">
+          <button onclick="InvoicesModule.sendInvoiceWhatsApp('${q.id}')" title="Invia la fattura al cliente su WhatsApp" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 hover:bg-emerald-100 transition">
+            <i data-lucide="message-circle" class="w-3.5 h-3.5"></i> WhatsApp
+          </button>
+          <button onclick="InvoicesModule.openInvoiceEmail('${q.id}')" title="Invia la fattura al cliente via Email" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-100 transition">
+            <i data-lucide="mail" class="w-3.5 h-3.5"></i> Email
+          </button>
+          <button onclick="InvoicesModule.sendToAccountant('${q.id}')" title="Invia l'XML al commercialista" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 hover:bg-purple-100 transition">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i> Commercialista
+          </button>
+          <button onclick="InvoicesModule.downloadXml('${q.id}')" title="Scarica il file XML da inviare allo SDI tramite il provider" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300 hover:bg-amber-100 transition">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> XML (SDI)
+          </button>
+        </div>
+
+        <!-- Stato invio (flag manuali) -->
+        <div class="flex flex-wrap items-center gap-2 mt-2">
           <span class="text-[11px] text-gray-400 mr-1">Inviata a:</span>
           ${sentBtns}
         </div>
@@ -312,5 +329,113 @@ export const InvoicesModule = {
     }
     App.showToast(`Fattura ${result.invoiceNumber} generata! Ora è nelle "Fatture emesse".`, 'success');
     this.render();
+  },
+
+  // ─────────── Invio fattura al cliente / commercialista / XML ───────────
+
+  markSent(quoteId, type) {
+    const quote = DB.getQuoteById(quoteId);
+    if (!quote) return;
+    const t = SENT_TYPES.find(s => s.key === type);
+    if (!t) return;
+    if (!quote[t.field]) {
+      quote[t.field] = new Date().toISOString();
+      DB.saveQuote(quote);
+    }
+  },
+
+  // Email della fattura al cliente (riusa il modale email)
+  openInvoiceEmail(quoteId) {
+    const quote = DB.getQuoteById(quoteId);
+    if (!quote) return;
+    const client = DB.getClientById(quote.clientId) || { name: 'Cliente' };
+    const clientEmail = client.email || '';
+    if (!clientEmail) {
+      App.showToast("Suggerimento: aggiungi l'email nella scheda cliente per precompilarla.", 'info');
+    }
+    const settings = DB.getSettings();
+    const totals = DB.calculateQuoteTotals(quote, settings.taxRegime === 'forfettario');
+    const dateStr = this.formatDate(quote.invoicedAt || quote.date);
+
+    const subjectText = `Fattura ${quote.invoiceNumber} - ${settings.businessName || ''}`;
+    const bodyText = [
+      `Gentile ${client.name},`,
+      '',
+      `Le trasmettiamo la fattura n. ${quote.invoiceNumber} del ${dateStr}:`,
+      '',
+      `• Imponibile: € ${totals.subtotal.toFixed(2)}`,
+      `• IVA: € ${totals.taxTotal.toFixed(2)}`,
+      `• TOTALE: € ${totals.grandTotal.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+      ...(settings.iban ? [`• IBAN per il pagamento: ${settings.iban}`] : []),
+      '',
+      'Restiamo a disposizione per qualsiasi chiarimento.',
+      '',
+      'Cordiali saluti,',
+      settings.ownerName || '',
+      settings.businessName || '',
+      settings.phone ? `Tel. ${settings.phone}` : ''
+    ].filter(l => l !== undefined && l !== null).join('\n');
+
+    const modal = document.getElementById('email-quote-modal');
+    if (!modal) return;
+    const titleEl = document.getElementById('email-modal-title');
+    if (titleEl) titleEl.textContent = 'Invia Fattura via Email';
+
+    document.getElementById('email-modal-to').value = clientEmail;
+    document.getElementById('email-modal-subject').value = subjectText;
+    document.getElementById('email-modal-body').value = bodyText;
+
+    const gmailBtn = document.getElementById('email-modal-gmail-btn');
+    const mailtoBtn = document.getElementById('email-modal-mailto-btn');
+    const dispatch = (mode) => {
+      const to = document.getElementById('email-modal-to').value.trim();
+      if (mode === 'gmail') {
+        window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}&su=${encodeURIComponent(subjectText)}&body=${encodeURIComponent(bodyText)}`, '_blank');
+      } else {
+        window.location.href = `mailto:${to}?subject=${encodeURIComponent(subjectText)}&body=${encodeURIComponent(bodyText)}`;
+      }
+      this.markSent(quoteId, 'client');
+      this.render();
+    };
+    gmailBtn.onclick = () => dispatch('gmail');
+    mailtoBtn.onclick = () => dispatch('mailto');
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    if (window.lucide) lucide.createIcons();
+  },
+
+  // WhatsApp della fattura al cliente
+  sendInvoiceWhatsApp(quoteId) {
+    const quote = DB.getQuoteById(quoteId);
+    if (!quote) return;
+    const client = DB.getClientById(quote.clientId) || { name: 'Cliente' };
+    const settings = DB.getSettings();
+    const totals = DB.calculateQuoteTotals(quote, settings.taxRegime === 'forfettario');
+    const dateStr = this.formatDate(quote.invoicedAt || quote.date);
+    const text = encodeURIComponent(
+      `*${settings.businessName || 'Fattura'}*\n` +
+      `Gentile ${client.name},\n` +
+      `Le invio la fattura n. *${quote.invoiceNumber}* del ${dateStr}.\n` +
+      `• Totale: *€ ${totals.grandTotal.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}*\n` +
+      (settings.iban ? `• IBAN: ${settings.iban}\n` : '') +
+      `\nGrazie,\n${settings.ownerName || ''}`
+    );
+    const phone = (client.phone || '').replace(/[^0-9+]/g, '').replace('+', '');
+    const url = phone ? `https://wa.me/${phone}?text=${text}` : `https://wa.me/?text=${text}`;
+    window.open(url, '_blank');
+    this.markSent(quoteId, 'client');
+    this.render();
+  },
+
+  // Invia XML al commercialista (scarica il file + apre l'email)
+  sendToAccountant(quoteId) {
+    FatturaPAModule.sendToAccountant(quoteId);
+    this.render();
+  },
+
+  // Scarica il file XML da inviare allo SDI tramite il provider
+  downloadXml(quoteId) {
+    FatturaPAModule.download(quoteId);
   },
 };

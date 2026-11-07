@@ -859,6 +859,8 @@ export const QuotesModule = {
   openEmailModal(quoteId) {
     const quote = DB.getQuoteById(quoteId);
     if (!quote) return;
+    const titleEl = document.getElementById('email-modal-title');
+    if (titleEl) titleEl.textContent = 'Invia Preventivo via Email';
     const client = DB.getClientById(quote.clientId) || { name: 'Cliente' };
     // L'email può essere vuota: l'utente la inserisce direttamente nel modale.
     const clientEmail = client.email || '';
