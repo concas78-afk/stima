@@ -238,18 +238,30 @@ const DEMO_QUOTES = [
 
 export const DB = {
   init() {
-    if (!localStorage.getItem(DB_KEYS.INIT)) {
-      // Nuovo utente reale: parti con dati puliti (nessuna identità/demo fittizia)
-      this.resetEmpty();
-    } else {
-      // Se già inizializzato da versione precedente, assicura che listino e agenda esistano
-      if (!localStorage.getItem(DB_KEYS.PRICEBOOK)) {
-        this._setItem(DB_KEYS.PRICEBOOK, JSON.stringify(DEMO_PRICEBOOK));
-      }
-      if (!localStorage.getItem(DB_KEYS.APPOINTMENTS)) {
-        this._setItem(DB_KEYS.APPOINTMENTS, JSON.stringify(DEMO_APPOINTMENTS));
-      }
+    // Migrazione una-tantum: rimuove i vecchi dati demo (Marco Rossi) da installazioni precedenti.
+    if (!localStorage.getItem('quickcraft_demo_cleared')) {
+      const settings = this.getSettings();
+      const clients = this.getClients();
+      const looksLikeDemo =
+        settings.ownerName === 'Marco Rossi' ||
+        settings.businessName === 'Rossi Impianti & Servizi' ||
+        (Array.isArray(clients) && clients.some(c => c.name === 'Condominio Belvedere'));
+      if (looksLikeDemo) this.resetEmpty();
+      localStorage.setItem('quickcraft_demo_cleared', 'true');
     }
+
+    // Primo avvio: dati puliti
+    if (!localStorage.getItem(DB_KEYS.INIT)) {
+      this.resetEmpty();
+      return;
+    }
+
+    // Assicura che le collezioni esistano (senza dati demo)
+    if (!localStorage.getItem(DB_KEYS.SETTINGS)) this._setItem(DB_KEYS.SETTINGS, JSON.stringify(EMPTY_SETTINGS));
+    if (!localStorage.getItem(DB_KEYS.CLIENTS)) this._setItem(DB_KEYS.CLIENTS, JSON.stringify([]));
+    if (!localStorage.getItem(DB_KEYS.QUOTES)) this._setItem(DB_KEYS.QUOTES, JSON.stringify([]));
+    if (!localStorage.getItem(DB_KEYS.PRICEBOOK)) this._setItem(DB_KEYS.PRICEBOOK, JSON.stringify([]));
+    if (!localStorage.getItem(DB_KEYS.APPOINTMENTS)) this._setItem(DB_KEYS.APPOINTMENTS, JSON.stringify([]));
   },
 
   // Scrittura sicura su localStorage (gestisce la quota piena senza crash)

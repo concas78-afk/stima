@@ -32,6 +32,11 @@ export const App = {
       this.showConsentModal();
     }
 
+    // Guida interattiva al primo avvio (dopo aver accettato il consenso)
+    if (this.hasConsented() && !localStorage.getItem('quickcraft_onboarding_done')) {
+      this.showOnboarding();
+    }
+
     // Mostra un avviso di benvenuto sulla prova gratuita (solo al primo avvio)
     if (!localStorage.getItem('quickcraft_welcome_shown')) {
       localStorage.setItem('quickcraft_welcome_shown', 'true');
@@ -80,11 +85,71 @@ export const App = {
       modal.classList.remove('flex');
     }
     this.showToast('Consensi registrati. Buon lavoro!', 'success');
+    if (!localStorage.getItem('quickcraft_onboarding_done')) {
+      this.showOnboarding();
+    }
   },
 
   // Indica se l'utente ha accettato i consensi (privacy + DPA)
   hasConsented() {
     return localStorage.getItem('quickcraft_consent') === 'true';
+  },
+
+  // ============ GUIDA INTERATTIVA (ONBOARDING) ============
+
+  _onboardingStep: 0,
+  _onboardingSteps: [
+    { icon: 'sparkles', title: 'Benvenuto in Stima!', text: 'Il modo più semplice per gestire clienti, preventivi e fatture. Ti mostro come iniziare in 4 passi.' },
+    { icon: 'users', title: '1. Aggiungi i clienti', text: 'Vai su Clienti e aggiungi il tuo primo cliente. Puoi anche importarli da CSV, vCard o incollando un elenco.' },
+    { icon: 'file-text', title: '2. Crea un preventivo', text: 'Vai su Preventivi → Nuovo Preventivo. Scegli il cliente, aggiungi le voci dal listino e invia il preventivo.' },
+    { icon: 'message-circle', title: '3. Invialo al cliente', text: 'Dal preventivo puoi inviarlo su WhatsApp o via email in un clic, e farlo firmare direttamente sullo schermo.' },
+    { icon: 'receipt', title: '4. Fattura e incassa', text: 'Quando il lavoro è eseguito, in Fatture generi la fattura, scarichi l\'XML per lo SDI e segni l\'incasso.' },
+    { icon: 'rocket', title: 'Tutto pronto!', text: 'Inizia subito: configura la tua attività in Impostazioni e crea il tuo primo preventivo.' }
+  ],
+
+  showOnboarding() {
+    this._onboardingStep = 0;
+    this.renderOnboarding();
+    const modal = document.getElementById('onboarding-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+  },
+
+  renderOnboarding() {
+    const steps = this._onboardingSteps;
+    const step = steps[this._onboardingStep];
+    if (!step) return;
+    const iconEl = document.getElementById('onboarding-icon');
+    const titleEl = document.getElementById('onboarding-title');
+    const textEl = document.getElementById('onboarding-text');
+    const dotsEl = document.getElementById('onboarding-dots');
+    const nextEl = document.getElementById('onboarding-next');
+    if (iconEl) iconEl.innerHTML = `<i data-lucide="${step.icon}" class="w-8 h-8"></i>`;
+    if (titleEl) titleEl.textContent = step.title;
+    if (textEl) textEl.textContent = step.text;
+    if (dotsEl) dotsEl.textContent = `${this._onboardingStep + 1} / ${steps.length}`;
+    if (nextEl) nextEl.textContent = this._onboardingStep === steps.length - 1 ? 'Inizia 🚀' : 'Avanti';
+    if (window.lucide) lucide.createIcons();
+  },
+
+  nextOnboarding() {
+    if (this._onboardingStep >= this._onboardingSteps.length - 1) {
+      this.closeOnboarding();
+    } else {
+      this._onboardingStep++;
+      this.renderOnboarding();
+    }
+  },
+
+  closeOnboarding() {
+    localStorage.setItem('quickcraft_onboarding_done', 'true');
+    const modal = document.getElementById('onboarding-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
   },
 
   // ============ GESTIONE PIANO & UPGRADE ============
