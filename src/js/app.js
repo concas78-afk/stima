@@ -159,6 +159,27 @@ export const App = {
     }
   },
 
+  // ============ MENU A COMPARSA (dal logo) ============
+  openMenu() {
+    const m = document.getElementById('app-menu');
+    if (!m) return;
+    m.classList.remove('hidden');
+    m.classList.add('flex');
+    if (window.lucide) lucide.createIcons();
+  },
+
+  closeMenu() {
+    const m = document.getElementById('app-menu');
+    if (!m) return;
+    m.classList.add('hidden');
+    m.classList.remove('flex');
+  },
+
+  menuGo(tab) {
+    this.closeMenu();
+    this.switchTab(tab);
+  },
+
   // ============ GESTIONE PIANO & UPGRADE ============
 
   // Verifica se l'utente è Pro; se non lo è mostra il modale di upgrade

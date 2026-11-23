@@ -103,10 +103,10 @@
 
   <!-- HEADER MOBILE (Visibile solo su smartphone) -->
   <header class="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-30 pt-safe">
-    <div class="flex items-center gap-2.5">
+    <button onclick="App.openMenu()" class="flex items-center gap-2.5" title="Apri menu">
       <img src="logo-scheck.svg" alt="Stima" class="w-8 h-8">
       <span class="font-bold text-gray-900 dark:text-white text-base">Stima</span>
-    </div>
+    </button>
 
     <div class="flex items-center gap-1">
       <span id="account-mobile"></span>
@@ -1015,6 +1015,59 @@
             <span>Copia messaggio e codice</span>
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MENU A COMPARSA (premendo il logo Stima) -->
+  <div id="app-menu" class="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm hidden items-end md:items-center justify-center p-4" onclick="if(event.target===this)App.closeMenu()">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-md p-5 shadow-2xl border border-gray-100 dark:border-gray-700/60">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <i data-lucide="layout-grid" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
+          Menu
+        </h3>
+        <button onclick="App.closeMenu()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-lg p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="grid grid-cols-3 gap-2">
+        <button onclick="App.menuGo('dashboard')" class="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+          <i data-lucide="layout-dashboard" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+          <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-200">Home</span>
+        </button>
+        <button onclick="App.menuGo('quotes')" class="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+          <i data-lucide="file-text" class="w-6 h-6 text-indigo-600 dark:text-indigo-400"></i>
+          <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-200">Preventivi</span>
+        </button>
+        <button onclick="App.menuGo('invoices')" class="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+          <i data-lucide="receipt" class="w-6 h-6 text-emerald-600 dark:text-emerald-400"></i>
+          <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-200">Fatture</span>
+        </button>
+        <button onclick="App.menuGo('clients')" class="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+          <i data-lucide="users" class="w-6 h-6 text-amber-600 dark:text-amber-400"></i>
+          <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-200">Clienti</span>
+        </button>
+        <button onclick="App.menuGo('pricebook')" class="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+          <i data-lucide="book-open" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+          <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-200">Listino</span>
+        </button>
+        <button onclick="App.menuGo('agenda')" class="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+          <i data-lucide="calendar" class="w-6 h-6 text-cyan-600 dark:text-cyan-400"></i>
+          <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-200">Agenda</span>
+        </button>
+        <button onclick="App.menuGo('campaigns')" class="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+          <i data-lucide="megaphone" class="w-6 h-6 text-pink-600 dark:text-pink-400"></i>
+          <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-200">Offerte</span>
+        </button>
+        <button onclick="App.menuGo('settings')" class="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+          <i data-lucide="settings" class="w-6 h-6 text-gray-600 dark:text-gray-300"></i>
+          <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-200">Impostazioni</span>
+        </button>
+        <button onclick="App.closeMenu(); App.toggleTheme()" class="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+          <i data-lucide="sun-moon" class="w-6 h-6 text-gray-600 dark:text-gray-300"></i>
+          <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-200">Tema</span>
+        </button>
       </div>
     </div>
   </div>
