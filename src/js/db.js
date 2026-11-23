@@ -34,7 +34,7 @@ const DEMO_SETTINGS = {
   iban: 'IT60X0542811101000000123456',
   taxRegime: 'ordinario', // 'ordinario' (con IVA standard 22%) oppure 'forfettario' (esente)
   withholdingTax: 0, // % ritenuta d'acconto (es. 20 per professionisti)
-  defaultNotes: 'Validità preventivo: 30 giorni. Pagamento all\'accettazione e saldo a fine lavori tramite bonifico bancario.',
+  defaultNotes: 'Pagamento tramite bonifico bancario. Grazie per la fiducia.',
   remindQuoteDays: 7,
   remindUnsent: true,
   remindUnpaid: true
@@ -59,7 +59,7 @@ const EMPTY_SETTINGS = {
   iban: '',
   taxRegime: 'ordinario',
   withholdingTax: 0,
-  defaultNotes: 'Validità preventivo: 30 giorni. Pagamento all\'accettazione e saldo a fine lavori tramite bonifico bancario.',
+  defaultNotes: 'Pagamento tramite bonifico bancario. Grazie per la fiducia.',
   remindQuoteDays: 7,
   remindUnsent: true,
   remindUnpaid: true
