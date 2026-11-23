@@ -10,9 +10,9 @@ Sono già loggato nel Play Console.
 
 CONTESTO
 - App: Stima
-- Devo sostituire la versione precedente con una NUOVA versione (versionCode 7, versionName 1.0.6).
+- Devo sostituire la versione precedente con una NUOVA versione (versionCode 8, versionName 1.0.7).
 - Il file da caricare è:
-  C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.6.aab
+  C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.7.aab
 - Contiene diverse correzioni: avvio con dati puliti (niente dati demo), barra di navigazione Android,
   login/cloud riattivato, pulsanti WhatsApp/Email sempre visibili e spunta "Lavoro eseguito".
 
@@ -37,13 +37,13 @@ PROCEDURA
    - Se c'è già il vecchio AAB, scegli di SOSTITUIRLO / AGGIORNARLO (se chiede di scartare
      la bozza, chiedimi prima).
    - Fermati e dimmi di selezionare questo file:
-     C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.6.aab
+     C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.7.aab
 5. Verifica che il Play Console mostri:
-   - versionCode: 7
-   - versionName: 1.0.6
+   - versionCode: 8
+   - versionName: 1.0.7
    (Se mostra ancora 1 / 1.0, dimmelo: significa che è stato caricato il file vecchio.)
 6. Nelle "Note di rilascio" (release notes) scrivi:
-   "Nuove funzioni Fatture: invio a cliente (WhatsApp/Email), commercialista, PDF fattura, export XML in ZIP e filtri. Migliorati aggiornamenti e avvio."
+   "Correzioni: numeri preventivi/fatture univoci, cliente obbligatorio, pulizia dati demo (anche cloud), note generiche. Incluse le funzioni Fatture (invio, PDF, XML/ZIP, filtri)."
 7. Salva (Save).
 8. NON inviare in revisione. Mostrami un riepilogo di cosa manca e aspetta la mia conferma
    esplicita prima di procedere.
@@ -62,15 +62,17 @@ NOTE
 Quando Claude te lo chiede, seleziona:
 
 ```
-C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.6.aab
+C:\Users\claudio\OneDrive - Polizia di Stato\Desktop\Stima - File Play Store\Stima-1.0.7.aab
 ```
 
 > ⚠️ **Attenzione**: nella cartella ci sono anche i vecchi AAB. Scegli quello **1.0.5**!
 
 ## ✅ Cosa cambia
 
-- **versionCode 7** (necessario: Google non accetta due volte lo stesso numero)
-- **versionName 1.0.6**
-- Nuove funzioni Fatture (invio cliente/commercialista, PDF, ZIP XML, filtri)
-- Fix aggiornamenti (Service Worker)
-- Avvio con dati puliti (niente demo)
+- **versionCode 8** (necessario: Google non accetta due volte lo stesso numero)
+- **versionName 1.0.7**
+- Numeri preventivo/fattura univoci
+- Cliente obbligatorio
+- Pulizia dati demo (anche cloud)
+- Note generiche
+- Funzioni Fatture (invio, PDF, XML/ZIP, filtri)
