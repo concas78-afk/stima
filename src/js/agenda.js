@@ -216,7 +216,7 @@ export const AgendaModule = {
           <button onclick="AgendaModule.shiftDay(-1)" class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
           <div class="text-center min-w-[180px]">
             <p class="font-bold text-gray-900 dark:text-white capitalize">${escapeHtml(this.formatDateIt(selected))}</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">${dayAppts.length} appuntamento${dayAppts.length === 1 ? '' : 'i'}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">${dayAppts.length} ${dayAppts.length === 1 ? 'appuntamento' : 'appuntamenti'}</p>
           </div>
           <button onclick="AgendaModule.shiftDay(1)" class="p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
         </div>

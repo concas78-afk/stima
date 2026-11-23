@@ -136,7 +136,7 @@ export const InvoicesModule = {
         ` : `
           <div class="space-y-2">
             ${daFatturare.map(q => {
-              const client = DB.getClientById(q.clientId) || { name: 'Cliente' };
+              const client = DB.getClientById(q.clientId) || { name: 'Cliente non assegnato' };
               const tot = DB.calculateQuoteTotals(q, settings.taxRegime === 'forfettario').grandTotal;
               return `
                 <div class="flex items-center justify-between gap-3 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-100 dark:border-amber-900/40">
@@ -236,13 +236,13 @@ export const InvoicesModule = {
   },
 
   invoiceCard(q, settings) {
-    const client = DB.getClientById(q.clientId) || { name: 'Cliente' };
+    const client = DB.getClientById(q.clientId) || { name: 'Cliente non assegnato' };
     const totals = DB.calculateQuoteTotals(q, settings.taxRegime === 'forfettario');
     const paid = q.status === 'Saldato';
 
     const clientLabel = client.id
       ? `<button onclick="ClientsModule.openDetail('${client.id}')" class="font-bold text-gray-900 dark:text-white text-sm mt-1.5 truncate text-left hover:text-blue-600 dark:hover:text-blue-400 hover:underline">${escapeHtml(client.name)}</button>`
-      : `<p class="font-bold text-gray-900 dark:text-white text-sm mt-1.5 truncate">${escapeHtml(client.name)}</p>`;
+      : `<button onclick="QuotesModule.openModal('${q.id}')" title="Assegna un cliente a questa fattura" class="font-bold text-amber-600 dark:text-amber-400 text-sm mt-1.5 truncate text-left hover:underline">${escapeHtml(client.name)} · Assegna</button>`;
 
     const sentBtns = SENT_TYPES.map(t => {
       const isSent = !!q[t.field];
@@ -376,7 +376,7 @@ export const InvoicesModule = {
   openInvoiceEmail(quoteId) {
     const quote = DB.getQuoteById(quoteId);
     if (!quote) return;
-    const client = DB.getClientById(quote.clientId) || { name: 'Cliente' };
+    const client = DB.getClientById(quote.clientId) || { name: 'Cliente non assegnato' };
     const clientEmail = client.email || '';
     if (!clientEmail) {
       App.showToast("Suggerimento: aggiungi l'email nella scheda cliente per precompilarla.", 'info');
@@ -437,7 +437,7 @@ export const InvoicesModule = {
   sendInvoiceWhatsApp(quoteId) {
     const quote = DB.getQuoteById(quoteId);
     if (!quote) return;
-    const client = DB.getClientById(quote.clientId) || { name: 'Cliente' };
+    const client = DB.getClientById(quote.clientId) || { name: 'Cliente non assegnato' };
     const settings = DB.getSettings();
     const totals = DB.calculateQuoteTotals(quote, settings.taxRegime === 'forfettario');
     const dateStr = this.formatDate(quote.invoicedAt || quote.date);
@@ -518,7 +518,7 @@ export const InvoicesModule = {
     }
     let total = 0;
     const lines = quotes.map(q => {
-      const client = DB.getClientById(q.clientId) || { name: 'Cliente' };
+      const client = DB.getClientById(q.clientId) || { name: 'Cliente non assegnato' };
       const tot = DB.calculateQuoteTotals(q, settings.taxRegime === 'forfettario').grandTotal;
       total += tot;
       return `- Fattura ${q.invoiceNumber} - ${client.name} - € ${tot.toFixed(2)}`;

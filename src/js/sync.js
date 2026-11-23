@@ -65,10 +65,46 @@ export const Sync = {
   // Ritorna { changed } per sapere se i dati locali sono cambiati.
   // ───────────────────────────────────────────────────────────────
   async syncOnLogin() {
-    const pulled = await this.pullAll();
-    if (pulled.ok) return { changed: true, source: 'cloud' };
+    const client = await Supabase.getClient();
+    if (!client) return { changed: false, source: 'none' };
+    const user = await Supabase.getUser();
+    if (!user) return { changed: false, source: 'none' };
+
+    const { data, error } = await client
+      .from('user_data')
+      .select('data')
+      .eq('profile_id', user.id)
+      .maybeSingle();
+
+    if (!error && data && data.data) {
+      // Se il cloud contiene ancora i dati demo, NON importarli: svuota e riallinea il cloud
+      if (this._looksLikeDemo(data.data)) {
+        DB.resetEmpty();
+        await this.pushAll();
+        return { changed: true, source: 'cloud-demo-cleared' };
+      }
+      const res = DB.importBackup(JSON.stringify(data.data));
+      if (res.ok) return { changed: true, source: 'cloud' };
+    }
+
+    // Nessun dato utile nel cloud: carica i dati locali
     const pushed = await this.pushAll();
     return { changed: false, source: pushed.ok ? 'local' : 'none' };
+  },
+
+  // Rileva se un backup contiene ancora i dati dimostrativi
+  _looksLikeDemo(backup) {
+    try {
+      const settings = backup.settings || {};
+      const clients = Array.isArray(backup.clients) ? backup.clients : [];
+      return (
+        settings.ownerName === 'Marco Rossi' ||
+        settings.businessName === 'Rossi Impianti & Servizi' ||
+        clients.some(c => c && c.name === 'Condominio Belvedere')
+      );
+    } catch (e) {
+      return false;
+    }
   },
 
   // ───────────────────────────────────────────────────────────────

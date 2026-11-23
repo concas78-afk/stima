@@ -38,8 +38,15 @@ export const FatturaPAModule = {
   getInvoiceNumber(quote) {
     if (quote.invoiceNumber) return quote.invoiceNumber;
     const year = new Date().getFullYear();
-    const invoices = DB.getQuotes().filter(q => q.invoiceNumber && q.invoiceNumber.includes('/' + year));
-    return `${invoices.length + 1}/${year}`;
+    // Usa il numero massimo esistente per l'anno + 1 (evita duplicati)
+    let max = 0;
+    DB.getQuotes().forEach(q => {
+      if (q.invoiceNumber && q.invoiceNumber.endsWith('/' + year)) {
+        const n = parseInt(q.invoiceNumber.split('/')[0], 10);
+        if (!isNaN(n) && n > max) max = n;
+      }
+    });
+    return `${max + 1}/${year}`;
   },
 
   // Determina se un codice fiscale è una P.IVA (11 cifre) o un CF (16 caratteri)

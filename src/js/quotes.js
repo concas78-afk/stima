@@ -118,7 +118,7 @@ export const QuotesModule = {
   },
 
   renderQuoteCard(quote, settings) {
-    const client = DB.getClientById(quote.clientId) || { name: 'Cliente Sconosciuto', phone: '' };
+    const client = DB.getClientById(quote.clientId) || { name: 'Cliente non assegnato', phone: '' };
     const totals = DB.calculateQuoteTotals(quote, settings.taxRegime === 'forfettario');
     
     const statusBadges = {
@@ -178,7 +178,9 @@ export const QuotesModule = {
                   </span>
                 ` : ''}
               </div>
-              <p class="text-sm font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer mt-0.5" onclick="event.stopPropagation(); ClientsModule.openDetail('${client.id}')">${escapeHtml(client.name)}</p>
+              ${client.id
+                ? `<p class="text-sm font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer mt-0.5" onclick="event.stopPropagation(); ClientsModule.openDetail('${client.id}')">${escapeHtml(client.name)}</p>`
+                : `<button class="text-sm font-bold text-amber-600 dark:text-amber-400 hover:underline mt-0.5 text-left" onclick="event.stopPropagation(); QuotesModule.openModal('${quote.id}')" title="Assegna un cliente a questo preventivo">${escapeHtml(client.name)} · Assegna</button>`}
               <div class="flex items-center gap-3 text-xs text-gray-400 dark:text-gray-500 mt-1 flex-wrap">
                 <span>Emesso: ${quote.date}</span>
                 ${totals.depositAmount > 0 ? `<span class="text-amber-600 dark:text-amber-400 font-medium">• Acconto € ${totals.depositAmount.toFixed(2)}${this.formatDepositPct(totals)}</span>` : ''}
@@ -686,10 +688,16 @@ export const QuotesModule = {
     const depositEl = document.getElementById('quote-deposit-percent');
     const depositAmtEl = document.getElementById('quote-deposit-amount');
 
+    const clientId = this.resolveQuoteClientId();
+    if (!clientId) {
+      App.showToast('Seleziona un cliente (o scrivi un nome per crearne uno nuovo)', 'error');
+      return;
+    }
+
     const quoteToSave = {
       id: id || undefined,
       number,
-      clientId: this.resolveQuoteClientId(),
+      clientId,
       date: document.getElementById('quote-date').value,
       dueDate: document.getElementById('quote-due-date').value,
       status: document.getElementById('quote-status').value,

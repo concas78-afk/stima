@@ -652,9 +652,15 @@ export const DB = {
     const year = now.getFullYear();
     const quotes = this.getQuotes();
     const prefix = `PREV-${year}-`;
-    const yearQuotes = quotes.filter(q => q.number && q.number.startsWith(prefix));
-    const nextNum = yearQuotes.length + 1;
-    return `${prefix}${String(nextNum).padStart(3, '0')}`;
+    // Usa il numero massimo esistente + 1 (evita duplicati se si eliminano preventivi)
+    let max = 0;
+    quotes.forEach(q => {
+      if (q.number && q.number.startsWith(prefix)) {
+        const n = parseInt(q.number.slice(prefix.length), 10);
+        if (!isNaN(n) && n > max) max = n;
+      }
+    });
+    return `${prefix}${String(max + 1).padStart(3, '0')}`;
   },
 
   // Data locale in formato YYYY-MM-DD (evita lo slittamento UTC di toISOString)
