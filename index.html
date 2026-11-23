@@ -110,7 +110,10 @@
 
     <div class="flex items-center gap-1">
       <span id="account-mobile"></span>
-      <button onclick="App.toggleTheme()" class="p-2 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+      <button onclick="App.switchTab('settings')" class="p-2 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" title="Impostazioni">
+        <i data-lucide="settings" class="w-5 h-5"></i>
+      </button>
+      <button onclick="App.toggleTheme()" class="p-2 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800" title="Tema">
         <i data-lucide="sun-moon" class="w-5 h-5"></i>
       </button>
     </div>
