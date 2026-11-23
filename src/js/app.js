@@ -25,6 +25,13 @@ export const App = {
     // Registra Service Worker se supportato (per PWA offline)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {});
+      // Quando un nuovo Service Worker prende il controllo, ricarica per applicare l'aggiornamento
+      let _swReloaded = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (_swReloaded) return;
+        _swReloaded = true;
+        window.location.reload();
+      });
     }
 
     // Gate di consenso privacy (Privacy Policy + DPA) al primo accesso
