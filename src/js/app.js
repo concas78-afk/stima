@@ -180,6 +180,57 @@ export const App = {
     this.switchTab(tab);
   },
 
+  // ============ GUIDA CONTESTUALE (per sezione) ============
+  _tips: {
+    dashboard: { icon: 'layout-dashboard', title: 'Dashboard', text: 'Qui hai il riepilogo: incassi, preventivi e promemoria. Usa le "Azioni Rapide" per creare clienti e preventivi in un clic.' },
+    quotes: { icon: 'file-text', title: 'Preventivi', text: 'Crea preventivi dal listino, inviali su WhatsApp o Email e fai firmare il cliente sullo schermo. Spunta "Eseguito" quando il lavoro è finito.' },
+    invoices: { icon: 'receipt', title: 'Fatture', text: 'Genera la fattura da un preventivo "Eseguito", scarica il PDF, inviala al cliente e al commercialista, ed esporta l\'XML per lo SDI.' },
+    clients: { icon: 'users', title: 'Clienti', text: 'Aggiungi i clienti o importali da CSV/vCard. Tocca un nome per vedere lo storico e inviare WhatsApp.' },
+    pricebook: { icon: 'book-open', title: 'Listino', text: 'Salva le tue voci e materiali più usati: li aggiungi ai preventivi in un clic.' },
+    agenda: { icon: 'calendar', title: 'Agenda', text: 'Organizza appuntamenti e sopralluoghi. Cambia vista (giorno/settimana/mese) e invia promemoria WhatsApp.' },
+    campaigns: { icon: 'megaphone', title: 'Offerte', text: 'Invia email di offerte ai clienti che hanno dato il consenso.' },
+    settings: { icon: 'settings', title: 'Impostazioni', text: 'Configura i tuoi dati, IBAN, link di pagamento, logo e backup. Qui trovi anche "Cancella tutti i dati".' }
+  },
+
+  maybeShowTip(tab) {
+    if (localStorage.getItem('quickcraft_tips_off') === 'true') return;
+    const tip = this._tips[tab];
+    if (!tip) return;
+    // Non mostrare mentre sono aperti consenso/onboarding
+    const consent = document.getElementById('consent-modal');
+    const onboarding = document.getElementById('onboarding-modal');
+    if ((consent && !consent.classList.contains('hidden')) || (onboarding && !onboarding.classList.contains('hidden'))) return;
+    const key = 'quickcraft_tip_' + tab;
+    const count = parseInt(localStorage.getItem(key) || '0', 10);
+    if (count >= 3) return;
+    localStorage.setItem(key, String(count + 1));
+    const iconEl = document.getElementById('tip-icon');
+    const titleEl = document.getElementById('tip-title');
+    const textEl = document.getElementById('tip-text');
+    if (iconEl) iconEl.innerHTML = `<i data-lucide="${tip.icon}" class="w-6 h-6"></i>`;
+    if (titleEl) titleEl.textContent = 'Suggerimenti · ' + tip.title;
+    if (textEl) textEl.textContent = tip.text;
+    const modal = document.getElementById('tip-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+    if (window.lucide) lucide.createIcons();
+  },
+
+  closeTip() {
+    const modal = document.getElementById('tip-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  },
+
+  disableTips() {
+    localStorage.setItem('quickcraft_tips_off', 'true');
+    this.closeTip();
+  },
+
   // ============ GESTIONE PIANO & UPGRADE ============
 
   // Verifica se l'utente è Pro; se non lo è mostra il modale di upgrade
@@ -277,6 +328,10 @@ export const App = {
 
     if (window.lucide) lucide.createIcons();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Guida contestuale: mostra il suggerimento della sezione (dopo il primo caricamento)
+    if (this._switched) this.maybeShowTip(tabId);
+    this._switched = true;
   },
 
   renderDashboard() {
