@@ -47,7 +47,11 @@ export const Supabase = {
   async signUp(email, password) {
     const client = await this.getClient();
     if (!client) return { error: new Error('Backend non configurato') };
-    return client.auth.signUp({ email, password });
+    return client.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: window.location.origin },
+    });
   },
 
   async signIn(email, password) {
